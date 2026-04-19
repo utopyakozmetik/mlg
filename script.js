@@ -124,4 +124,30 @@ fetch('data/posts.json')
       slider.className = 'slider';
       slider.id = `slider-${idx}`;
       slider.innerHTML = `
-        <div class="slides"></
+        <div class="slides"></div>
+        <button class="prev">‹</button>
+        <button class="next">›</button>
+        <select class="intervalSelect">
+          <option value="0">Manuel</option>
+          <option value="3">3 sn</option>
+          <option value="5">5 sn</option>
+          <option value="10">10 sn</option>
+        </select>
+      `;
+      postDiv.appendChild(slider);
+      initSlider(`slider-${idx}`, post.images);
+
+      const desc = document.createElement('p');
+      desc.textContent = post.description;
+      postDiv.appendChild(desc);
+
+      if (post.audio) {
+        const audio = document.createElement('audio');
+        audio.controls = true;
+        audio.src = post.audio;
+        postDiv.appendChild(audio);
+      }
+
+      timeline.appendChild(postDiv);
+    });
+  });
