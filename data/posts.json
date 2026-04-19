@@ -1,0 +1,11 @@
+[
+  {
+    "title": "Bir cümlelik başlık",
+    "images": [
+      "assets/images/post1/foto1.jpg",
+      "assets/images/post1/foto2.jpg"
+    ],
+    "audio": "assets/audio/track1.mp3",
+    "description": "Kısa açıklama metni burada."
+  }
+]

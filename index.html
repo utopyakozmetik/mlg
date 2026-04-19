@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Altug Portfolio</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Arka plan kolaj -->
+  <div id="bg-collage"></div>
+
+  <div class="container">
+    <!-- Sol akış -->
+    <main id="timeline"></main>
+
+    <!-- Sağ sabit panel -->
+    <aside class="sidebar">
+      <h3>Linkler</h3>
+      <ul>
+        <li><a href="cv.pdf" download>CV indir</a></li>
+        <li><a href="https://github.com/altug">GitHub</a></li>
+        <li><a href="https://linkedin.com/in/altug">LinkedIn</a></li>
+      </ul>
+
+      <h3>Filtreler</h3>
+      <select id="filterSelect">
+        <option value="">Normal</option>
+        <option value="sepia">Sepia</option>
+        <option value="grayscale">Grayscale</option>
+        <option value="blur">Blur</option>
+      </select>
+
+      <h3>Arama</h3>
+      <input type="text" id="searchInput" placeholder="Kelime ara...">
+    </aside>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
