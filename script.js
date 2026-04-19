@@ -18,8 +18,8 @@ function renderCollageText(text, containerId) {
   }
 }
 
-// Slider + video + otomatik geçiş
-function initSlider(sliderId, media, interval = 0) {
+// Slider + video + otomatik geçiş (post bazlı)
+function initSlider(sliderId, media) {
   const slider = document.getElementById(sliderId);
   const slidesContainer = slider.querySelector('.slides');
   slidesContainer.innerHTML = '';
@@ -55,13 +55,21 @@ function initSlider(sliderId, media, interval = 0) {
     showSlide(currentIndex);
   });
 
-  if (interval > 0) {
-    setInterval(() => {
-      currentIndex = (currentIndex + 1) % slideItems.length;
-      showSlide(currentIndex);
-    }, interval * 1000);
-  }
+  // Slayt süresi dropdown (post bazlı)
+  const intervalSelect = slider.querySelector('.intervalSelect');
+  let intervalId = null;
+  intervalSelect.addEventListener('change', e => {
+    if (intervalId) clearInterval(intervalId);
+    const val = parseInt(e.target.value);
+    if (val > 0) {
+      intervalId = setInterval(() => {
+        currentIndex = (currentIndex + 1) % slideItems.length;
+        showSlide(currentIndex);
+      }, val * 1000);
+    }
+  });
 
+  // Video modal
   slidesContainer.addEventListener('click', e => {
     if (e.target.tagName === 'VIDEO') openVideoModal(e.target.src);
   });
@@ -86,12 +94,6 @@ document.getElementById('filterSelect').addEventListener('change', e => {
   document.querySelectorAll('.slides img, .slides video').forEach(el => {
     el.className = filter ? 'active ' + filter : 'active';
   });
-});
-
-// Slayt süresi
-let slideInterval = 0;
-document.getElementById('intervalSelect').addEventListener('change', e => {
-  slideInterval = parseInt(e.target.value);
 });
 
 // Arama
@@ -122,12 +124,4 @@ fetch('data/posts.json')
       slider.className = 'slider';
       slider.id = `slider-${idx}`;
       slider.innerHTML = `
-        <div class="slides"></div>
-        <button class="prev">‹</button>
-        <button class="next">›</button>
-      `;
-      postDiv.appendChild(slider);
-      initSlider(`slider-${idx}`, post.images, slideInterval);
-
-      const desc = document.createElement('p');
-      desc.textContent
+        <div class="slides"></
