@@ -1,4 +1,3 @@
-// Ransom başlık render
 function renderCollageText(text, containerId) {
   const container = document.getElementById(containerId);
   container.innerHTML = '';
@@ -19,36 +18,80 @@ function renderCollageText(text, containerId) {
   }
 }
 
-// Slider mantığı
-function initSlider(sliderId, images) {
+// Slider + video + otomatik geçiş
+function initSlider(sliderId, media, interval = 0) {
   const slider = document.getElementById(sliderId);
   const slidesContainer = slider.querySelector('.slides');
   slidesContainer.innerHTML = '';
-  images.forEach((src, i) => {
-    const img = document.createElement('img');
-    img.src = src;
-    if (i === 0) img.classList.add('active');
-    slidesContainer.appendChild(img);
+
+  media.forEach((src, i) => {
+    let el;
+    if (src.endsWith('.mp4')) {
+      el = document.createElement('video');
+      el.src = src;
+      el.muted = true;
+    } else {
+      el = document.createElement('img');
+      el.src = src;
+    }
+    if (i === 0) el.classList.add('active');
+    slidesContainer.appendChild(el);
   });
+
   let currentIndex = 0;
-  const slideImages = slidesContainer.querySelectorAll('img');
+  const slideItems = slidesContainer.children;
+
+  function showSlide(index) {
+    [...slideItems].forEach(el => el.classList.remove('active'));
+    slideItems[index].classList.add('active');
+  }
+
   slider.querySelector('.next').addEventListener('click', () => {
-    slideImages[currentIndex].classList.remove('active');
-    currentIndex = (currentIndex+1) % slideImages.length;
-    slideImages[currentIndex].classList.add('active');
+    currentIndex = (currentIndex + 1) % slideItems.length;
+    showSlide(currentIndex);
   });
   slider.querySelector('.prev').addEventListener('click', () => {
-    slideImages[currentIndex].classList.remove('active');
-    currentIndex = (currentIndex-1+slideImages.length) % slideImages.length;
-    slideImages[currentIndex].classList.add('active');
+    currentIndex = (currentIndex - 1 + slideItems.length) % slideItems.length;
+    showSlide(currentIndex);
+  });
+
+  if (interval > 0) {
+    setInterval(() => {
+      currentIndex = (currentIndex + 1) % slideItems.length;
+      showSlide(currentIndex);
+    }, interval * 1000);
+  }
+
+  slidesContainer.addEventListener('click', e => {
+    if (e.target.tagName === 'VIDEO') openVideoModal(e.target.src);
   });
 }
 
-// Filtre seçimi
+function openVideoModal(src) {
+  const modal = document.createElement('div');
+  modal.className = 'video-modal';
+  modal.innerHTML = `
+    <div class="video-wrapper">
+      <video src="${src}" controls autoplay></video>
+      <button class="close-modal">×</button>
+    </div>
+  `;
+  document.body.appendChild(modal);
+  modal.querySelector('.close-modal').addEventListener('click', () => modal.remove());
+}
+
+// Filtre
 document.getElementById('filterSelect').addEventListener('change', e => {
-  document.querySelectorAll('.slides img').forEach(el => {
-    el.className = e.target.value ? 'active '+e.target.value : 'active';
+  const filter = e.target.value;
+  document.querySelectorAll('.slides img, .slides video').forEach(el => {
+    el.className = filter ? 'active ' + filter : 'active';
   });
+});
+
+// Slayt süresi
+let slideInterval = 0;
+document.getElementById('intervalSelect').addEventListener('change', e => {
+  slideInterval = parseInt(e.target.value);
 });
 
 // Arama
@@ -60,24 +103,31 @@ document.getElementById('searchInput').addEventListener('input', e => {
   });
 });
 
-// Background collage
-function createCollage(images) {
-  const collage = document.getElementById('bg-collage');
-  collage.innerHTML = '';
-  for (let i = 0; i < 25; i++) {
-    const img = document.createElement('img');
-    img.src = images[Math.floor(Math.random() * images.length)];
-    collage.appendChild(img);
-  }
-}
-const today = new Date().toISOString().split('T')[0];
-const storedDay = localStorage.getItem('collageDay');
-const bgImages = [
-  'assets/background/bg1.jpg',
-  'assets/background/bg2.jpg',
-  'assets/background/bg3.jpg'
-];
-if (storedDay !== today) {
-  createCollage(bgImages);
-  localStorage.setItem('collageDay', today);
-}
+// Postları yükle
+fetch('data/posts.json')
+  .then(res => res.json())
+  .then(posts => {
+    const timeline = document.getElementById('timeline');
+    posts.forEach((post, idx) => {
+      const postDiv = document.createElement('div');
+      postDiv.className = 'post';
+
+      const titleDiv = document.createElement('div');
+      titleDiv.className = 'collage-title';
+      titleDiv.id = `title-${idx}`;
+      postDiv.appendChild(titleDiv);
+      renderCollageText(post.title, `title-${idx}`);
+
+      const slider = document.createElement('div');
+      slider.className = 'slider';
+      slider.id = `slider-${idx}`;
+      slider.innerHTML = `
+        <div class="slides"></div>
+        <button class="prev">‹</button>
+        <button class="next">›</button>
+      `;
+      postDiv.appendChild(slider);
+      initSlider(`slider-${idx}`, post.images, slideInterval);
+
+      const desc = document.createElement('p');
+      desc.textContent

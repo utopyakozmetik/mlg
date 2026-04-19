@@ -6,20 +6,15 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Arka plan kolaj -->
   <div id="bg-collage"></div>
 
   <div class="container">
-    <!-- Sol akış -->
     <main id="timeline"></main>
 
-    <!-- Sağ sabit panel -->
     <aside class="sidebar">
       <h3>Linkler</h3>
       <ul>
-        <li><a href="cv.pdf" download>CV indir</a></li>
-        <li><a href="https://github.com/altug">GitHub</a></li>
-        <li><a href="https://linkedin.com/in/altug">LinkedIn</a></li>
+        <li><a href="https://bandcamp.com/altug" target="_blank">Bandcamp</a></li>
       </ul>
 
       <h3>Filtreler</h3>
@@ -28,6 +23,14 @@
         <option value="sepia">Sepia</option>
         <option value="grayscale">Grayscale</option>
         <option value="blur">Blur</option>
+      </select>
+
+      <h3>Slayt Süresi</h3>
+      <select id="intervalSelect">
+        <option value="0">Manuel</option>
+        <option value="3">3 sn</option>
+        <option value="5">5 sn</option>
+        <option value="10">10 sn</option>
       </select>
 
       <h3>Arama</h3>
