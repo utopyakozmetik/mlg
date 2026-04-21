@@ -103,7 +103,7 @@ document.getElementById('searchInput').addEventListener('input', e => {
 });
 
 // Postları yükle
-fetch('data/posts.json')
+fetch('/data/posts.json')
   .then(res => res.json())
   .then(posts => {
     console.log(posts); // JSON gerçekten geliyor mu kontrol
