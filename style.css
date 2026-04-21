@@ -64,6 +64,15 @@ body {
 }
 .prev { left: 0; } .next { right: 0; }
 
+.intervalSelect {
+  margin-top: 10px;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background: #fff;
+  color: #000;
+}
+
 audio {
   width: 100%;
   margin-top: 10px;
@@ -116,4 +125,53 @@ audio {
   cursor: pointer;
   border-radius: 50%;
   width: 40px; height: 40px;
+}
+
+/* 📱 Mobil uyum */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+
+  #timeline {
+    flex: none;
+    padding: 10px;
+  }
+
+  .sidebar {
+    position: relative;
+    flex: none;
+    width: 100%;
+    height: auto;
+    border-left: none;
+    border-top: 1px solid #ddd;
+    padding: 10px;
+  }
+
+  .post {
+    margin: 20px 0;
+    padding: 15px;
+  }
+
+  .collage-letter {
+    height: 35px;
+    margin: 2px;
+  }
+
+  .slider {
+    max-width: 100%;
+  }
+
+  .prev, .next {
+    padding: 5px;
+    font-size: 14px;
+  }
+
+  .intervalSelect {
+    width: 100%;
+  }
+
+  body {
+    font-size: 14px;
+  }
 }

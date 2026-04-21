@@ -104,20 +104,25 @@ document.getElementById('searchInput').addEventListener('input', e => {
 
 // Postları yükle
 fetch('/data/posts.json')
-  .then(res => res.json())
+  .then(res => {
+    if (!res.ok) throw new Error("JSON bulunamadı: " + res.status);
+    return res.json();
+  })
   .then(posts => {
-    console.log(posts); // JSON gerçekten geliyor mu kontrol
+    console.log("Posts JSON:", posts);
     const timeline = document.getElementById('timeline');
     posts.forEach((post, idx) => {
       const postDiv = document.createElement('div');
       postDiv.className = 'post';
 
+      // Başlık ransom font
       const titleDiv = document.createElement('div');
       titleDiv.className = 'collage-title';
       titleDiv.id = `title-${idx}`;
       postDiv.appendChild(titleDiv);
       renderCollageText(post.title, `title-${idx}`);
 
+      // Slider
       const slider = document.createElement('div');
       slider.className = 'slider';
       slider.id = `slider-${idx}`;
@@ -127,4 +132,31 @@ fetch('/data/posts.json')
         <button class="next">›</button>
         <select class="intervalSelect">
           <option value="0">Manuel</option>
-          <option value="3
+          <option value="3">3 sn</option>
+          <option value="5">5 sn</option>
+          <option value="10">10 sn</option>
+        </select>
+      `;
+      postDiv.appendChild(slider);
+      initSlider(`slider-${idx}`, post.images);
+
+      // Audio
+      if (post.audio) {
+        const audio = document.createElement('audio');
+        audio.controls = true;
+        audio.src = post.audio;
+        postDiv.appendChild(audio);
+      }
+
+      // Description
+      if (post.description) {
+        const desc = document.createElement('p');
+        desc.textContent = post.description;
+        postDiv.appendChild(desc);
+      }
+
+      // Postu timeline’a ekle
+      timeline.appendChild(postDiv);
+    });
+  })
+  .catch(err => console.error("Hata:", err));
