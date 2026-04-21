@@ -18,7 +18,12 @@ function renderCollageText(text, containerId) {
   }
 }
 
-// Slider + video + otomatik geçiş (post bazlı)
+// Sidebar başlığı ransom fontla
+document.addEventListener('DOMContentLoaded', () => {
+  renderCollageText("Linkler", "sidebar-title");
+});
+
+// Slider + video + otomatik geçiş
 function initSlider(sliderId, media) {
   const slider = document.getElementById(sliderId);
   const slidesContainer = slider.querySelector('.slides');
@@ -55,7 +60,7 @@ function initSlider(sliderId, media) {
     showSlide(currentIndex);
   });
 
-  // Slayt süresi dropdown (post bazlı)
+  // Slayt süresi dropdown
   const intervalSelect = slider.querySelector('.intervalSelect');
   let intervalId = null;
   intervalSelect.addEventListener('change', e => {
@@ -88,14 +93,6 @@ function openVideoModal(src) {
   modal.querySelector('.close-modal').addEventListener('click', () => modal.remove());
 }
 
-// Filtre
-document.getElementById('filterSelect').addEventListener('change', e => {
-  const filter = e.target.value;
-  document.querySelectorAll('.slides img, .slides video').forEach(el => {
-    el.className = filter ? 'active ' + filter : 'active';
-  });
-});
-
 // Arama
 document.getElementById('searchInput').addEventListener('input', e => {
   const keyword = e.target.value.toLowerCase();
@@ -109,6 +106,7 @@ document.getElementById('searchInput').addEventListener('input', e => {
 fetch('data/posts.json')
   .then(res => res.json())
   .then(posts => {
+    console.log(posts); // JSON gerçekten geliyor mu kontrol
     const timeline = document.getElementById('timeline');
     posts.forEach((post, idx) => {
       const postDiv = document.createElement('div');
@@ -129,25 +127,4 @@ fetch('data/posts.json')
         <button class="next">›</button>
         <select class="intervalSelect">
           <option value="0">Manuel</option>
-          <option value="3">3 sn</option>
-          <option value="5">5 sn</option>
-          <option value="10">10 sn</option>
-        </select>
-      `;
-      postDiv.appendChild(slider);
-      initSlider(`slider-${idx}`, post.images);
-
-      const desc = document.createElement('p');
-      desc.textContent = post.description;
-      postDiv.appendChild(desc);
-
-      if (post.audio) {
-        const audio = document.createElement('audio');
-        audio.controls = true;
-        audio.src = post.audio;
-        postDiv.appendChild(audio);
-      }
-
-      timeline.appendChild(postDiv);
-    });
-  });
+          <option value="3
