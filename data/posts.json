@@ -1,11 +1,30 @@
 [
   {
-    "title": "Bir cümlelik başlık",
+    "title": "Yaratıcı Mod",
     "images": [
       "assets/images/post1/foto1.jpg",
-      "assets/images/post1/foto2.jpg"
+      "assets/images/post1/foto2.jpg",
+      "assets/images/post1/foto3.jpg"
     ],
     "audio": "assets/audio/track1.mp3",
-    "description": "Kısa açıklama metni burada."
+    "description": "Ses tasarımı üzerine yeni denemeler ve kaos odaklı kontrol."
+  },
+  {
+    "title": "Gezgin Ruh",
+    "images": [
+      "assets/videos/post2/video1.mp4",
+      "assets/images/post2/foto1.jpg"
+    ],
+    "description": "Yolda olmak üzerine notlar ve fotoğraflar."
+  },
+  {
+    "title": "Közde Kahve",
+    "images": [
+      "assets/images/post3/foto1.jpg",
+      "assets/images/post3/foto2.jpg",
+      "assets/images/post3/foto3.jpg",
+      "assets/images/post3/foto4.jpg"
+    ],
+    "description": "Közde kavrulmuş kahve deneyimi ve test notları."
   }
 ]
