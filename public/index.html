@@ -1,34 +1,53 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Portfolio</title>
+<title>Media Archive</title>
 
-  <link rel="stylesheet" href="/style.css">
+<link rel="stylesheet" href="/style.css">
+<link rel="manifest" href="/manifest.json">
 </head>
+
 <body>
 
-  <div id="bg-collage">
-    <img src="/assets/images/background/bg.png" alt="">
+<div id="bg"></div>
+
+<div class="container">
+
+  <main id="timeline"></main>
+
+  <aside class="sidebar">
+    <div id="sidebar-title"></div>
+    <button onclick="openAdmin()">+ New Post</button>
+  </aside>
+
+</div>
+
+<!-- FULLSCREEN VIEW -->
+<div id="modal" class="modal hidden">
+  <div class="modal-content">
+    <button onclick="closeModal()">✕</button>
+    <div id="modal-body"></div>
   </div>
+</div>
 
-  <div class="container">
+<!-- ADMIN -->
+<div id="admin" class="modal hidden">
+  <div class="modal-content">
+    <button onclick="closeAdmin()">✕</button>
 
-    <main id="timeline">
-      <div class="post">Loading...</div>
-    </main>
+    <input id="a_title" placeholder="Title">
+    <input id="a_date" placeholder="YYYY-MM-DD">
+    <input id="a_media" placeholder="Media URL">
+    <textarea id="a_desc" placeholder="Description"></textarea>
 
-    <aside class="sidebar">
-      <div id="sidebar-title"></div>
-
-      <input id="searchInput" placeholder="Search...">
-    </aside>
-
+    <button onclick="savePost()">Save</button>
   </div>
+</div>
 
-  <script src="/script.js" defer></script>
+<script src="/script.js" defer></script>
 
 </body>
 </html>

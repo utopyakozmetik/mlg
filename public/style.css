@@ -1,74 +1,94 @@
 body {
   margin: 0;
-  font-family: sans-serif;
-  color: white;
   background: black;
+  color: white;
+  overflow: hidden;
+  font-family: sans-serif;
 }
 
-#bg-collage {
+/* BACKGROUND PARALLAX */
+#bg {
   position: fixed;
   inset: 0;
+  background-image: url("/assets/images/background/bg.png");
+  background-size: cover;
+  opacity: 0.3;
+  transform: scale(1.1);
   z-index: -1;
 }
 
-#bg-collage img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0.25;
-}
-
+/* LAYOUT */
 .container {
   display: flex;
 }
 
+/* FEED */
 #timeline {
-  flex: 2;
-  padding: 20px;
+  width: 70%;
+  height: 100vh;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
 }
 
+/* SIDEBAR */
 .sidebar {
-  flex: 1;
-  padding: 20px;
+  width: 30%;
+  position: fixed;
+  right: 0;
+  height: 100vh;
   background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(10px);
+  padding: 20px;
 }
 
+/* POSTS */
 .post {
-  margin-bottom: 40px;
-  padding: 15px;
-  background: rgba(0,0,0,0.6);
-  border-radius: 10px;
+  height: 100vh;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
 }
 
-.collage-letter {
-  height: 40px;
-  margin: 2px;
+.post img,
+.post video {
+  width: 80%;
+  border-radius: 20px;
 }
 
-.slider {
-  position: relative;
-}
-
-.slides img,
-.slides video {
-  width: 100%;
-  display: none;
-  border-radius: 10px;
-}
-
-.prev, .next {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
+/* MODAL */
+.modal {
+  position: fixed;
+  inset: 0;
   background: black;
-  color: white;
-  border: none;
-  padding: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-.prev { left: 0; }
-.next { right: 0; }
 
-audio {
-  width: 100%;
-  margin-top: 10px;
+.hidden { display: none; }
+
+.modal-content {
+  width: 80%;
+}
+
+/* RANSOM */
+.ransom-char {
+  display: inline-block;
+  animation: glitch 0.7s infinite;
+}
+
+@keyframes glitch {
+  0% { transform: translate(0); }
+  25% { transform: translate(-1px,1px); }
+  50% { transform: translate(1px,-1px); }
+  75% { transform: translate(-1px,0); }
+}
+
+/* MOBILE */
+@media(max-width:768px){
+  #timeline { width: 100%; }
+  .sidebar { display:none; }
 }
