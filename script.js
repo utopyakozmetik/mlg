@@ -39,14 +39,19 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   }
+
+  loadPosts(); // 🔥 BURAYA ALDIK (daha güvenli)
 });
 
 // === SLIDER ===
 function initSlider(sliderId, media) {
   const slider = document.getElementById(sliderId);
-  const slidesContainer = slider.querySelector('.slides');
+  if (!slider) return;
 
+  const slidesContainer = slider.querySelector('.slides');
   slidesContainer.innerHTML = '';
+
+  if (!media || media.length === 0) return;
 
   media.forEach((src, i) => {
     let el;
@@ -99,46 +104,57 @@ function openVideoModal(src) {
   modal.querySelector('.close-modal').onclick = () => modal.remove();
 }
 
-// === POSTS LOAD ===
-fetch('/data/posts.json')
-  .then(res => res.json())
-  .then(posts => {
-    const timeline = document.getElementById('timeline');
+// === POSTS LOAD (FIXED) ===
+function loadPosts() {
+  fetch('./data/posts.json') // 🔥 EN KRİTİK FIX
+    .then(res => {
+      if (!res.ok) throw new Error("JSON yüklenemedi");
+      return res.json();
+    })
+    .then(posts => {
+      const timeline = document.getElementById('timeline');
+      if (!timeline) return;
 
-    posts.forEach((post, idx) => {
-      const postDiv = document.createElement('div');
-      postDiv.className = 'post';
+      timeline.innerHTML = '';
 
-      const titleDiv = document.createElement('div');
-      titleDiv.className = 'collage-title';
-      titleDiv.id = `title-${idx}`;
-      postDiv.appendChild(titleDiv);
+      posts.forEach((post, idx) => {
+        const postDiv = document.createElement('div');
+        postDiv.className = 'post';
 
-      renderCollageText(post.title, `title-${idx}`);
+        const titleDiv = document.createElement('div');
+        titleDiv.className = 'collage-title';
+        titleDiv.id = `title-${idx}`;
+        postDiv.appendChild(titleDiv);
 
-      const slider = document.createElement('div');
-      slider.className = 'slider';
-      slider.id = `slider-${idx}`;
+        renderCollageText(post.title || "Başlık", `title-${idx}`);
 
-      slider.innerHTML = `
-        <div class="slides"></div>
-        <button class="prev">‹</button>
-        <button class="next">›</button>
+        const slider = document.createElement('div');
+        slider.className = 'slider';
+        slider.id = `slider-${idx}`;
+
+        slider.innerHTML = `
+          <div class="slides"></div>
+          <button class="prev">‹</button>
+          <button class="next">›</button>
+        `;
+
+        postDiv.appendChild(slider);
+        initSlider(`slider-${idx}`, post.images || []);
+
+        timeline.appendChild(postDiv);
+      });
+    })
+    .catch((err) => {
+      console.error(err);
+
+      const timeline = document.getElementById('timeline');
+      if (!timeline) return;
+
+      timeline.innerHTML = `
+        <div class="post">
+          <h2>TEST POST</h2>
+          <p>JSON yüklenemedi → dosya yolu hatalı.</p>
+        </div>
       `;
-
-      postDiv.appendChild(slider);
-      initSlider(`slider-${idx}`, post.images);
-
-      timeline.appendChild(postDiv);
     });
-  })
-  .catch(() => {
-    // 🔥 fallback (çok kritik)
-    const timeline = document.getElementById('timeline');
-    timeline.innerHTML = `
-      <div class="post">
-        <h2>TEST POST</h2>
-        <p>JSON yüklenmedi ama sistem çalışıyor.</p>
-      </div>
-    `;
-  });
+}
