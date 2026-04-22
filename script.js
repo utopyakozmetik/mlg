@@ -106,7 +106,7 @@ function openVideoModal(src) {
 
 // === POSTS LOAD (FIXED) ===
 function loadPosts() {
-  fetch('./data/posts.json') // 🔥 EN KRİTİK FIX
+  fetch('/data/posts.json') // 🔥 EN KRİTİK FIX
     .then(res => {
       if (!res.ok) throw new Error("JSON yüklenemedi");
       return res.json();
