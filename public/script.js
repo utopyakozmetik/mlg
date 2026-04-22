@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 // =====================
-// LOAD (LOCAL + CACHE READY)
+// LOAD
 // =====================
 async function loadPosts(){
   const local = localStorage.getItem("posts");
@@ -31,7 +31,7 @@ async function loadPosts(){
 }
 
 // =====================
-// SORT DATE
+// SORT
 // =====================
 function sortByDate(p){
   return p.sort((a,b)=> new Date(b.date)-new Date(a.date));
@@ -66,7 +66,7 @@ function randomChar(){
 }
 
 // =====================
-// FEED
+// FEED (🔥 FIXED)
 // =====================
 function renderFeed(data){
   const t=document.getElementById("timeline");
@@ -76,11 +76,39 @@ function renderFeed(data){
     const d=document.createElement("div");
     d.className="post";
 
-    d.innerHTML=`
-      <video src="${p.images[0]}" muted loop playsinline></video>
-      <h2>${p.title}</h2>
-      <small>${p.date}</small>
+    const media = (p.images && p.images.length > 0)
+      ? p.images[0]
+      : null;
+
+    if (!media) return;
+
+    const isVideo = typeof media === "string" && media.includes(".mp4");
+
+    let mediaHTML = "";
+
+    if (isVideo) {
+      mediaHTML = `
+        <video src="${media}" muted loop playsinline></video>
+      `;
+    } else {
+      mediaHTML = `
+        <img src="${media}" />
+      `;
+    }
+
+    d.innerHTML = `
+      ${mediaHTML}
+      <h2>${p.title || ""}</h2>
+      <small>${p.date || ""}</small>
     `;
+
+    // 🔥 AUDIO FIX
+    if (p.audio) {
+      const audio = document.createElement("audio");
+      audio.controls = true;
+      audio.src = p.audio;
+      d.appendChild(audio);
+    }
 
     d.onclick=()=>openModal(i);
 
@@ -91,7 +119,7 @@ function renderFeed(data){
 }
 
 // =====================
-// AUTO PLAY
+// VIDEO AUTO PLAY
 // =====================
 function observeVideos(){
   const vids=document.querySelectorAll("video");
@@ -107,7 +135,7 @@ function observeVideos(){
 }
 
 // =====================
-// FULLSCREEN VIEW
+// MODAL (FIXED)
 // =====================
 function openModal(i){
   current=i;
@@ -115,11 +143,24 @@ function openModal(i){
   const p=posts[i];
   const m=document.getElementById("modal");
 
-  document.getElementById("modal-body").innerHTML=`
-    <video src="${p.images[0]}" autoplay muted loop></video>
-    <h1>${p.title}</h1>
-    <p>${p.description||""}</p>
-    <small>${p.date}</small>
+  const media = (p.images && p.images.length > 0)
+    ? p.images[0]
+    : null;
+
+  const isVideo = media && media.includes(".mp4");
+
+  document.getElementById("modal-body").innerHTML = `
+    ${media ? (
+      isVideo
+        ? `<video src="${media}" autoplay muted loop></video>`
+        : `<img src="${media}" />`
+    ) : ""}
+
+    <h1>${p.title || ""}</h1>
+    <p>${p.description || ""}</p>
+    <small>${p.date || ""}</small>
+
+    ${p.audio ? `<audio controls src="${p.audio}"></audio>` : ""}
   `;
 
   m.classList.remove("hidden");
@@ -168,32 +209,4 @@ function parallax(){
     document.getElementById("bg")
       .style.transform=`translate(${x}px,${y}px) scale(1.1)`;
   });
-}
-
-// =====================
-// ADMIN PANEL
-// =====================
-function openAdmin(){
-  document.getElementById("admin").classList.remove("hidden");
-}
-
-function closeAdmin(){
-  document.getElementById("admin").classList.add("hidden");
-}
-
-function savePost(){
-  const p={
-    title: a_title.value,
-    date: a_date.value,
-    images:[a_media.value],
-    description:a_desc.value
-  };
-
-  posts.push(p);
-
-  localStorage.setItem("posts",JSON.stringify(posts));
-
-  renderFeed(posts);
-
-  closeAdmin();
 }
