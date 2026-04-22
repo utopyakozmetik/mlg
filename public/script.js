@@ -117,7 +117,14 @@ function loadPosts() {
 
       timeline.innerHTML = '';
 
-      posts.forEach((post, idx) => {
+if (post.audio) {
+  const audio = document.createElement('audio');
+  audio.controls = true;
+  audio.src = post.audio;
+  postDiv.appendChild(audio);
+}
+      
+posts.forEach((post, idx) => {
         const postDiv = document.createElement('div');
         postDiv.className = 'post';
 
