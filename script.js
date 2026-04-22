@@ -13,8 +13,8 @@ function renderCollageText(text, containerId) {
 
     const upper = char.toUpperCase();
     const variants = [
-      `assets/ransom/${upper}1.png`,
-      `assets/ransom/${upper}2.png`
+      `ransom/${upper}1.png`,
+      `ransom/${upper}2.png`
     ];
 
     const img = document.createElement('img');
