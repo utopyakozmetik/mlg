@@ -1,4 +1,6 @@
-// === COLLAGE TEXT ===
+// ======================
+// COLLAGE TEXT
+// ======================
 function renderCollageText(text, containerId) {
   const container = document.getElementById(containerId);
   if (!container) return;
@@ -12,9 +14,10 @@ function renderCollageText(text, containerId) {
     }
 
     const upper = char.toUpperCase();
+
     const variants = [
-      `ransom/${upper}1.png`,
-      `ransom/${upper}2.png`
+      `/ransom/${upper}1.png`,
+      `/ransom/${upper}2.png`
     ];
 
     const img = document.createElement('img');
@@ -25,116 +28,115 @@ function renderCollageText(text, containerId) {
   }
 }
 
-// === INIT ===
+// ======================
+// INIT
+// ======================
 document.addEventListener('DOMContentLoaded', () => {
-  renderCollageText("Linkler", "sidebar-title");
+  renderCollageText("LINKLER", "sidebar-title");
 
-  const searchInput = document.getElementById('searchInput');
-  if (searchInput) {
-    searchInput.addEventListener('input', e => {
-      const keyword = e.target.value.toLowerCase();
-      document.querySelectorAll('.post').forEach(post => {
-        const text = post.innerText.toLowerCase();
-        post.style.display = text.includes(keyword) ? 'block' : 'none';
+  const search = document.getElementById('searchInput');
+
+  if (search) {
+    search.addEventListener('input', e => {
+      const val = e.target.value.toLowerCase();
+
+      document.querySelectorAll('.post').forEach(p => {
+        p.style.display = p.innerText.toLowerCase().includes(val)
+          ? 'block'
+          : 'none';
       });
     });
   }
 
-  loadPosts(); // 🔥 BURAYA ALDIK (daha güvenli)
+  loadPosts();
 });
 
-// === SLIDER ===
-function initSlider(sliderId, media) {
-  const slider = document.getElementById(sliderId);
-  if (!slider) return;
+// ======================
+// SLIDER (FIXED)
+// ======================
+function initSlider(id, media) {
+  const slider = document.getElementById(id);
+  if (!slider || !media?.length) return;
 
-  const slidesContainer = slider.querySelector('.slides');
-  slidesContainer.innerHTML = '';
+  const container = slider.querySelector('.slides');
+  container.innerHTML = '';
 
-  if (!media || media.length === 0) return;
-
-  media.forEach((src, i) => {
+  media.forEach(src => {
     let el;
 
     if (src.endsWith('.mp4')) {
       el = document.createElement('video');
       el.src = src;
       el.muted = true;
+      el.loop = true;
+      el.playsInline = true;
     } else {
       el = document.createElement('img');
       el.src = src;
     }
 
-    if (i === 0) el.classList.add('active');
-    slidesContainer.appendChild(el);
+    el.style.display = 'none';
+    container.appendChild(el);
   });
 
-  let currentIndex = 0;
-  const slideItems = slidesContainer.children;
+  const items = container.children;
+  let i = 0;
 
-  function showSlide(index) {
-    [...slideItems].forEach(el => el.classList.remove('active'));
-    slideItems[index].classList.add('active');
+  function show(n) {
+    [...items].forEach(x => x.style.display = 'none');
+
+    const active = items[n];
+    active.style.display = 'block';
+
+    if (active.tagName === 'VIDEO') {
+      active.currentTime = 0;
+      active.play().catch(()=>{});
+    }
   }
 
+  show(0);
+
   slider.querySelector('.next').onclick = () => {
-    currentIndex = (currentIndex + 1) % slideItems.length;
-    showSlide(currentIndex);
+    i = (i + 1) % items.length;
+    show(i);
   };
 
   slider.querySelector('.prev').onclick = () => {
-    currentIndex = (currentIndex - 1 + slideItems.length) % slideItems.length;
-    showSlide(currentIndex);
+    i = (i - 1 + items.length) % items.length;
+    show(i);
   };
 }
 
-// === VIDEO MODAL ===
-function openVideoModal(src) {
-  const modal = document.createElement('div');
-  modal.className = 'video-modal';
-
-  modal.innerHTML = `
-    <div class="video-wrapper">
-      <video src="${src}" controls autoplay></video>
-      <button class="close-modal">×</button>
-    </div>
-  `;
-
-  document.body.appendChild(modal);
-  modal.querySelector('.close-modal').onclick = () => modal.remove();
-}
-
-// === POSTS LOAD (FIXED) ===
+// ======================
+// LOAD POSTS
+// ======================
 function loadPosts() {
-  fetch('/posts.json') //
-    .then(res => {
-      if (!res.ok) throw new Error("JSON yüklenemedi");
-      return res.json();
-    })
+  fetch('/posts.json')
+    .then(r => r.json())
     .then(posts => {
       const timeline = document.getElementById('timeline');
-      if (!timeline) return;
-
       timeline.innerHTML = '';
 
-if (post.audio) {
-  const audio = document.createElement('audio');
-  audio.controls = true;
-  audio.src = post.audio;
-  postDiv.appendChild(audio);
-}
-      
-posts.forEach((post, idx) => {
-        const postDiv = document.createElement('div');
-        postDiv.className = 'post';
+      posts.forEach((post, idx) => {
+        const postEl = document.createElement('div');
+        postEl.className = 'post';
 
-        const titleDiv = document.createElement('div');
-        titleDiv.className = 'collage-title';
-        titleDiv.id = `title-${idx}`;
-        postDiv.appendChild(titleDiv);
+        // TITLE
+        const title = document.createElement('div');
+        title.className = 'collage-title';
+        title.id = `title-${idx}`;
+        postEl.appendChild(title);
 
-        renderCollageText(post.title || "Başlık", `title-${idx}`);
+        renderCollageText(post.title, `title-${idx}`);
 
+        // DESCRIPTION
+        if (post.description) {
+          const d = document.createElement('p');
+          d.textContent = post.description;
+          postEl.appendChild(d);
+        }
+
+        // SLIDER
         const slider = document.createElement('div');
         slider.className = 'slider';
         slider.id = `slider-${idx}`;
@@ -145,23 +147,21 @@ posts.forEach((post, idx) => {
           <button class="next">›</button>
         `;
 
-        postDiv.appendChild(slider);
-        initSlider(`slider-${idx}`, post.images || []);
+        postEl.appendChild(slider);
 
-        timeline.appendChild(postDiv);
+        // AUDIO
+        if (post.audio) {
+          const audio = document.createElement('audio');
+          audio.controls = true;
+          audio.src = post.audio;
+          postEl.appendChild(audio);
+        }
+
+        timeline.appendChild(postEl);
+
+        // IMPORTANT ORDER FIX
+        initSlider(`slider-${idx}`, post.images);
       });
     })
-    .catch((err) => {
-      console.error(err);
-
-      const timeline = document.getElementById('timeline');
-      if (!timeline) return;
-
-      timeline.innerHTML = `
-        <div class="post">
-          <h2>TEST POST</h2>
-          <p>JSON yüklenemedi → dosya yolu hatalı.</p>
-        </div>
-      `;
-    });
+    .catch(err => console.log(err));
 }

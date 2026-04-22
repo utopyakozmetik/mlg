@@ -1,54 +1,34 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-  <!-- 🔥 mobil + responsive fix -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio</title>
 
-  <title>Altug Portfolio</title>
-
-  <!-- 🔥 cache kırma (çok önemli deployda) -->
-  <link rel="stylesheet" href="style.css?v=1.1">
+  <link rel="stylesheet" href="/style.css">
 </head>
 <body>
 
-  <!-- BACKGROUND -->
   <div id="bg-collage">
-    <img src="assets/images/background/bg.png" alt="Background">
+    <img src="/assets/images/background/bg.png" alt="">
   </div>
 
-  <!-- MAIN LAYOUT -->
   <div class="container">
 
-    <!-- POSTS -->
     <main id="timeline">
-      <!-- fallback (JS patlarsa boş kalmaz) -->
-      <div class="post">
-        <p>Yükleniyor...</p>
-      </div>
+      <div class="post">Loading...</div>
     </main>
 
-    <!-- SIDEBAR -->
     <aside class="sidebar">
       <div id="sidebar-title"></div>
 
-      <ul>
-        <li>
-          <a href="https://bandcamp.com/altug" target="_blank">
-            Bandcamp
-          </a>
-        </li>
-      </ul>
-
-      <h3>Arama</h3>
-      <input type="text" id="searchInput" placeholder="Kelime ara...">
+      <input id="searchInput" placeholder="Search...">
     </aside>
 
   </div>
 
-  <!-- 🔥 script defer (render bug fix) -->
-  <script src="script.js?v=1.1" defer></script>
+  <script src="/script.js" defer></script>
 
 </body>
 </html>
