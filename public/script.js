@@ -1,14 +1,9 @@
 
-// =====================
-// STATE
-// =====================
 let posts = [];
 let current = 0;
 
-// =====================
-// INIT
-// =====================
 document.addEventListener("DOMContentLoaded", async () => {
+
   renderRansom("FALAN FİLAN");
 
   posts = await loadPosts();
@@ -19,55 +14,37 @@ document.addEventListener("DOMContentLoaded", async () => {
   parallax();
 });
 
-// =====================
-// LOAD
-// =====================
+/* LOAD */
 async function loadPosts(){
-  const local = localStorage.getItem("posts");
-  if(local) return JSON.parse(local);
-
   const res = await fetch("/posts.json");
   return await res.json();
 }
 
-// =====================
-// SORT
-// =====================
+/* SORT */
 function sortByDate(p){
   return p.sort((a,b)=> new Date(b.date)-new Date(a.date));
 }
 
-// =====================
-// SIDEBAR RANSOM
-// =====================
+/* RANSOM */
 function renderRansom(text){
-  const el = document.getElementById("sidebar-title");
-  el.innerHTML = "";
+  const el=document.getElementById("sidebar-title");
+  el.innerHTML="";
 
   let i=0;
 
-  (function type(){
+  (function loop(){
     if(i<text.length){
       const s=document.createElement("span");
       s.textContent=text[i];
       s.className="ransom-char";
-
-      s.onmouseover=()=>s.textContent=randomChar();
-
       el.appendChild(s);
       i++;
-      setTimeout(type,80);
+      setTimeout(loop,80);
     }
   })();
 }
 
-function randomChar(){
-  return String.fromCharCode(65+Math.random()*26);
-}
-
-// =====================
-// FEED (🔥 FIXED)
-// =====================
+/* FEED */
 function renderFeed(data){
   const t=document.getElementById("timeline");
   t.innerHTML="";
@@ -76,25 +53,15 @@ function renderFeed(data){
     const d=document.createElement("div");
     d.className="post";
 
-    const media = (p.images && p.images.length > 0)
-      ? p.images[0]
-      : null;
+    const media = p.images?.[0];
 
-    if (!media) return;
+    const isVideo = media?.includes(".mp4");
 
-    const isVideo = typeof media === "string" && media.includes(".mp4");
-
-    let mediaHTML = "";
-
-    if (isVideo) {
-      mediaHTML = `
-        <video src="${media}" muted loop playsinline></video>
-      `;
-    } else {
-      mediaHTML = `
-        <img src="${media}" />
-      `;
-    }
+    const mediaHTML = media
+      ? (isVideo
+          ? `<video src="${media}" muted loop playsinline></video>`
+          : `<img src="${media}">`)
+      : "";
 
     d.innerHTML = `
       ${mediaHTML}
@@ -102,12 +69,12 @@ function renderFeed(data){
       <small>${p.date || ""}</small>
     `;
 
-    // 🔥 AUDIO FIX
-    if (p.audio) {
-      const audio = document.createElement("audio");
-      audio.controls = true;
-      audio.src = p.audio;
-      d.appendChild(audio);
+    /* AUDIO */
+    if(p.audio){
+      const a=document.createElement("audio");
+      a.controls=true;
+      a.src=p.audio;
+      d.appendChild(a);
     }
 
     d.onclick=()=>openModal(i);
@@ -118,61 +85,49 @@ function renderFeed(data){
   observeVideos();
 }
 
-// =====================
-// VIDEO AUTO PLAY
-// =====================
+/* AUTO PLAY VIDEO */
 function observeVideos(){
   const vids=document.querySelectorAll("video");
 
-  const o=new IntersectionObserver(e=>{
+  const obs=new IntersectionObserver(e=>{
     e.forEach(v=>{
       if(v.isIntersecting) v.target.play();
       else v.target.pause();
     });
   },{threshold:0.6});
 
-  vids.forEach(v=>o.observe(v));
+  vids.forEach(v=>obs.observe(v));
 }
 
-// =====================
-// MODAL (FIXED)
-// =====================
+/* MODAL */
 function openModal(i){
   current=i;
 
   const p=posts[i];
-  const m=document.getElementById("modal");
+  const media=p.images?.[0];
 
-  const media = (p.images && p.images.length > 0)
-    ? p.images[0]
-    : null;
+  const isVideo=media?.includes(".mp4");
 
-  const isVideo = media && media.includes(".mp4");
+  document.getElementById("modal-body").innerHTML=`
+    ${media ? (isVideo
+      ? `<video src="${media}" autoplay muted loop></video>`
+      : `<img src="${media}">`)
+    : ""}
 
-  document.getElementById("modal-body").innerHTML = `
-    ${media ? (
-      isVideo
-        ? `<video src="${media}" autoplay muted loop></video>`
-        : `<img src="${media}" />`
-    ) : ""}
-
-    <h1>${p.title || ""}</h1>
+    <h1>${p.title}</h1>
     <p>${p.description || ""}</p>
-    <small>${p.date || ""}</small>
 
     ${p.audio ? `<audio controls src="${p.audio}"></audio>` : ""}
   `;
 
-  m.classList.remove("hidden");
+  document.getElementById("modal").classList.remove("hidden");
 }
 
 function closeModal(){
   document.getElementById("modal").classList.add("hidden");
 }
 
-// =====================
-// SWIPE
-// =====================
+/* SWIPE */
 function initSwipe(){
   let start=0;
 
@@ -198,15 +153,13 @@ function prev(){
   openModal(current);
 }
 
-// =====================
-// PARALLAX
-// =====================
+/* PARALLAX */
 function parallax(){
   window.addEventListener("mousemove",e=>{
     const x=(window.innerWidth-e.pageX)/50;
     const y=(window.innerHeight-e.pageY)/50;
 
     document.getElementById("bg")
-      .style.transform=`translate(${x}px,${y}px) scale(1.1)`;
+      .style.transform=`translate(${x}px,${y}px) scale(1.08)`;
   });
 }

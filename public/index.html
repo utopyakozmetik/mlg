@@ -4,15 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Media Archive</title>
+<title>Media System</title>
 
 <link rel="stylesheet" href="/style.css">
-<link rel="manifest" href="/manifest.json">
 </head>
 
 <body>
 
+<!-- BACKGROUND -->
 <div id="bg"></div>
+<div id="grain"></div>
 
 <div class="container">
 
@@ -20,30 +21,15 @@
 
   <aside class="sidebar">
     <div id="sidebar-title"></div>
-    <button onclick="openAdmin()">+ New Post</button>
   </aside>
 
 </div>
 
-<!-- FULLSCREEN VIEW -->
+<!-- MODAL -->
 <div id="modal" class="modal hidden">
-  <div class="modal-content">
-    <button onclick="closeModal()">✕</button>
+  <div class="modal-inner">
+    <button onclick="closeModal()">×</button>
     <div id="modal-body"></div>
-  </div>
-</div>
-
-<!-- ADMIN -->
-<div id="admin" class="modal hidden">
-  <div class="modal-content">
-    <button onclick="closeAdmin()">✕</button>
-
-    <input id="a_title" placeholder="Title">
-    <input id="a_date" placeholder="YYYY-MM-DD">
-    <input id="a_media" placeholder="Media URL">
-    <textarea id="a_desc" placeholder="Description"></textarea>
-
-    <button onclick="savePost()">Save</button>
   </div>
 </div>
 
