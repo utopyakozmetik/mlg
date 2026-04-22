@@ -1,6 +1,0 @@
-{
-  "routes": [
-    { "src": "/posts.json", "dest": "public/posts.json" },
-    { "src": "/assets/(.*)", "dest": "public/assets/$1" }
-  ]
-}
