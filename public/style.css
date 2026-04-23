@@ -10,32 +10,26 @@ body {
 #bg {
   position: fixed;
   inset: 0;
-  background: url("/assets/images/background/bg.png") center/cover;
-  transform: scale(1.08);
-  z-index: -2;
-}
-
-#grain {
-  position: fixed;
-  inset: 0;
-  background: url("https://grainy-gradients.vercel.app/noise.svg");
-  opacity: 0.05;
+  background: url("/assets/images/background/bg.png") center/cover no-repeat;
   z-index: -1;
 }
 
 /* LAYOUT */
-.container { display: flex; }
+.container {
+  display: flex;
+}
 
 #timeline {
   width: 70%;
   height: 100vh;
   overflow-y: scroll;
-
   scroll-snap-type: y mandatory;
 }
 
 /* SCROLLBAR */
-#timeline::-webkit-scrollbar { width: 6px; }
+#timeline::-webkit-scrollbar {
+  width: 6px;
+}
 #timeline::-webkit-scrollbar-thumb {
   background: rgba(255,255,255,0.3);
 }
@@ -52,13 +46,21 @@ body {
 
   opacity: 0.4;
   transform: scale(0.95);
-  transition: 0.4s;
+  transition: 0.4s ease;
 }
 
+/* ACTIVE GLOW */
 .post.active {
   opacity: 1;
   transform: scale(1);
-  filter: drop-shadow(0 0 20px rgba(255,255,255,0.3));
+  filter: drop-shadow(0 0 20px rgba(255,255,255,0.25));
+}
+
+/* HOVER */
+.post:hover {
+  transform: scale(1.02);
+  opacity: 0.85;
+  cursor: pointer;
 }
 
 /* SLIDER */
@@ -76,16 +78,18 @@ body {
   border-radius: 12px;
 }
 
-.slide.active { display: block; }
+.slide.active {
+  display: block;
+}
 
-/* BUTTON */
+/* BUTTONS */
 .slider button {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(0,0,0,0.5);
-  border: none;
+  background: rgba(0,0,0,0.6);
   color: white;
+  border: none;
   padding: 8px;
   cursor: pointer;
 }
@@ -98,7 +102,7 @@ body {
   position: absolute;
   bottom: 10px;
   right: 10px;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0,0,0,0.6);
   padding: 4px 8px;
   border-radius: 10px;
 }
@@ -124,16 +128,3 @@ audio {
   height: 100vh;
   backdrop-filter: blur(10px);
 }
-
-/* RANSOM */
-.ransom-char {
-  display: inline-block;
-}
-
-/* MODAL */
-.modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.9);
-}
-.hidden { display:none; }
