@@ -225,3 +225,19 @@ audio {
 .sidebar-bottom {
   margin-top: auto;
 }
+
+/* 🔥 MODAL SLIDER FULLSIZE */
+#modal-media .slider {
+  width: 90vw;
+  height: 80vh;
+}
+
+#modal-media .slide {
+  object-fit: contain;
+}
+
+#sidebar-title {
+  font-family: 'Special Elite', monospace;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+}

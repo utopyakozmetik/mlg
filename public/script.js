@@ -89,6 +89,9 @@ function createSlider(media){
   const prev = document.createElement("button");
   const next = document.createElement("button");
 
+prev.className = "prev";
+next.className = "next";
+
   /* 🔥 SADECE FOTO NAV */
   prev.textContent = "‹";
   next.textContent = "›";
