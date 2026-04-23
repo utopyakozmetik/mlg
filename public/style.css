@@ -24,7 +24,6 @@ body {
   scroll-snap-type: y mandatory;
 }
 
-/* SCROLLBAR */
 #timeline::-webkit-scrollbar {
   width: 6px;
 }
@@ -32,15 +31,16 @@ body {
   background: rgba(255,255,255,0.3);
 }
 
-/* POST */
 .post {
-  height: 100vh;
+  min-height: 100vh;
   scroll-snap-align: start;
 
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+
+  gap: 12px;
 
   opacity: 0.4;
   transform: scale(0.95);
@@ -50,27 +50,27 @@ body {
 .post.active {
   opacity: 1;
   transform: scale(1);
-  filter: drop-shadow(0 0 20px rgba(255,255,255,0.25));
 }
 
 .post:hover {
   transform: scale(1.02);
   opacity: 0.85;
+  cursor: pointer;
 }
 
 /* SLIDER */
 .slider {
   width: 60%;
-  max-width: 500px;
   position: relative;
+  overflow: hidden;
+  border-radius: 12px;
 }
 
 .slide {
   display: none;
   width: 100%;
-  height: 300px;
+  height: 320px;
   object-fit: cover;
-  border-radius: 12px;
 }
 
 .slide.active {
@@ -95,17 +95,10 @@ body {
 .text-box {
   width: 60%;
   text-align: center;
-  margin-top: 15px;
 }
 
 .text-box p {
   white-space: pre-line;
-}
-
-/* AUDIO */
-audio {
-  width: 60%;
-  margin-top: 10px;
 }
 
 /* SIDEBAR */
@@ -117,9 +110,55 @@ audio {
   padding: 60px 40px;
 }
 
-/* BANDCAMP */
-.bandcamp {
-  display: block;
-  margin-top: 20px;
-  color: white;
+/* MODAL */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.95);
+  z-index: 999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hidden {
+  display: none;
+}
+
+.modal-content {
+  width: 80%;
+  max-height: 90vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.modal-text {
+  text-align: center;
+}
+
+#modal-slider img,
+#modal-slider video {
+  width: 100%;
+  max-height: 60vh;
+  object-fit: contain;
+}
+
+.audio-ui audio {
+  width: 100%;
+  filter: invert(1);
+}
+
+.close-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: white;
+  border: none;
+  font-size: 22px;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  border-radius: 50%;
 }
