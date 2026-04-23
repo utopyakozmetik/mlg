@@ -1,39 +1,30 @@
-/* BODY */
 body {
   margin: 0;
   color: white;
   font-family: sans-serif;
-
-  overflow-x: hidden;
-  overflow-y: hidden;
+  overflow: hidden;
 }
 
-/* BACKGROUND */
+/* BG */
 #bg {
   position: fixed;
   inset: 0;
-
   background-image: url("/assets/images/background/bg.png");
   background-size: cover;
   background-position: center;
-  background-repeat: no-repeat;
-
   z-index: -5;
-  pointer-events: none;
 }
 
 /* LAYOUT */
 .container {
   display: flex;
   height: 100vh;
-  overflow: hidden;
 }
 
 /* FEED */
 #timeline {
   width: 70%;
   height: 100vh;
-
   overflow-y: auto;
   scroll-snap-type: y mandatory;
 }
@@ -41,7 +32,6 @@ body {
 /* POST */
 .post {
   height: 100vh;
-
   scroll-snap-align: start;
 
   display: flex;
@@ -49,15 +39,15 @@ body {
   align-items: center;
   justify-content: center;
 
-  gap: 10px;
+  background: rgba(0,0,0,0.35);
+  border-radius: 16px;
+  backdrop-filter: blur(6px);
 
-  position: relative;
-  transition: transform 0.3s ease;
+  margin: 20px;
 }
 
 .post.active {
   transform: scale(1.02);
-  filter: drop-shadow(0 0 25px rgba(255,255,255,0.25));
 }
 
 /* SLIDER */
@@ -65,7 +55,6 @@ body {
   width: 75%;
   height: 450px;
   position: relative;
-  overflow: hidden;
 }
 
 .slide {
@@ -79,32 +68,17 @@ body {
   display: block;
 }
 
-/* SLIDER BUTTONS */
+/* SLIDER BUTTON */
 .slider button {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-
   width: 60px;
   height: 80px;
-
   background: rgba(0,0,0,0.6);
-  border: none;
   color: white;
-
-  font-size: 22px;
+  border: none;
   cursor: pointer;
-  z-index: 5;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  transition: 0.2s ease;
-}
-
-.slider button:hover {
-  background: rgba(255,255,255,0.15);
 }
 
 .prev { left: 10px; }
@@ -118,38 +92,54 @@ body {
 
 /* AUDIO */
 audio {
-  width: 60%;
+  width: 200px;
+  height: 30px;
 }
 
 /* SIDEBAR */
 .sidebar {
   width: 30%;
-  height: 100vh;
-
-  position: sticky;
-  top: 0;
-
   padding: 40px;
-  box-sizing: border-box;
-
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
 }
 
 #sidebar-title {
-  font-size: 20px;
-  white-space: nowrap;
+  font-family: 'Special Elite', monospace;
+  letter-spacing: 4px;
+}
+
+/* ARCHIVE */
+#archive {
+  margin-top: 30px;
+}
+
+.archive-month {
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+.archive-days {
+  display: none;
+  margin-left: 10px;
+}
+
+.archive-day {
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.archive-day.active {
+  color: #fff;
+  font-weight: bold;
 }
 
 /* MODAL */
 .modal {
   position: fixed;
   inset: 0;
-
   background: rgba(0,0,0,0.95);
   z-index: 999;
-
   display: flex;
   align-items: center;
   justify-content: center;
@@ -160,84 +150,31 @@ audio {
 .modal-content {
   width: 95%;
   height: 95%;
-
   position: relative;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
 }
 
+/* MEDIA */
 #modal-media img,
 #modal-media video {
   max-width: 90vw;
   max-height: 85vh;
-  object-fit: contain;
 }
 
-#modal-text {
-  margin-top: 20px;
-  text-align: center;
-}
-
-/* MODAL BUTTONS */
-#closeModal,
-#prevPost,
-#nextPost {
-  position: absolute;
-
-  background: rgba(255,255,255,0.1);
-  color: white;
-
-  border: none;
-  cursor: pointer;
-
-  z-index: 10;
-}
-
+/* BUTTONS */
 #closeModal {
+  position: absolute;
   top: 10px;
   right: 10px;
+  z-index: 50;
 }
 
-/* 🔥 GERÇEK POST NAV */
 #prevPost, #nextPost {
-  width: 120px;
-  height: 100%;
-
+  position: absolute;
   top: 0;
-
+  height: 100%;
+  width: 120px;
   background: rgba(0,0,0,0.2);
-
-  font-size: 16px;
-  font-weight: bold;
 }
 
 #prevPost { left: 0; }
 #nextPost { right: 0; }
-
-#prevPost:hover,
-#nextPost:hover {
-  background: rgba(255,255,255,0.08);
-}
-
-.sidebar-bottom {
-  margin-top: auto;
-}
-
-/* 🔥 MODAL SLIDER FULLSIZE */
-#modal-media .slider {
-  width: 90vw;
-  height: 80vh;
-}
-
-#modal-media .slide {
-  object-fit: contain;
-}
-
-#sidebar-title {
-  font-family: 'Special Elite', monospace;
-  letter-spacing: 4px;
-  text-transform: uppercase;
-}

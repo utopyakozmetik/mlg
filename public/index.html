@@ -6,59 +6,49 @@
   <title>Feed Engine</title>
 
   <link rel="stylesheet" href="style.css">
+
+  <!-- FONT -->
+  <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet">
 </head>
 
 <body>
 
-<!-- BACKGROUND -->
 <div id="bg"></div>
 
-<!-- LAYOUT -->
 <div class="container">
 
-  <!-- FEED -->
   <main id="timeline"></main>
 
-  <!-- SIDEBAR -->
   <aside class="sidebar">
     <div id="sidebar-title"></div>
 
-    <!-- 🔥 link daha düzgün konumlanır -->
+    <!-- ARCHIVE -->
+    <div id="archive"></div>
+
     <div class="sidebar-bottom">
-      <a href="https://sanr.bandcamp.com" target="_blank" rel="noopener noreferrer">
-        sanr.bandcamp.com
-      </a>
+      <a href="https://sanr.bandcamp.com" target="_blank">sanr.bandcamp.com</a>
     </div>
   </aside>
 
 </div>
 
-<!-- =========================
-     MODAL
-========================= -->
+<!-- MODAL -->
 <div id="modal" class="modal hidden">
   <div class="modal-content">
 
-    <!-- KAPAT -->
     <button id="closeModal">✕</button>
 
-    <!-- 🔥 GERÇEK POST NAV (büyük alan) -->
-    <button id="prevPost">← Önceki Gönderi</button>
-    <button id="nextPost">Sonraki Gönderi →</button>
+    <!-- POST NAV -->
+    <button id="prevPost">← Önceki</button>
+    <button id="nextPost">Sonraki →</button>
 
-    <!-- MEDIA -->
     <div id="modal-media"></div>
-
-    <!-- TEXT -->
     <div id="modal-text"></div>
 
   </div>
 </div>
 
-<!-- SCRIPT -->
 <script src="script.js" defer></script>
-
-<link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet">
 
 </body>
 </html>
