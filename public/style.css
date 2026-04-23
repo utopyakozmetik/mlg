@@ -3,9 +3,9 @@ body {
   background: black;
   color: white;
   font-family: sans-serif;
-  overflow: hidden;
 }
 
+/* BACKGROUND FIX */
 #bg {
   position: fixed;
   inset: 0;
@@ -13,24 +13,26 @@ body {
   z-index: -1;
 }
 
+/* LAYOUT FIX */
 .container {
   display: flex;
 }
 
+/* TIMELINE CRITICAL FIX */
 #timeline {
   width: 70%;
   height: 100vh;
-  overflow-y: scroll;
+  overflow-y: auto;
   scroll-snap-type: y mandatory;
+
+  position: relative;
+  z-index: 10;
+
+  display: flex;
+  flex-direction: column;
 }
 
-#timeline::-webkit-scrollbar {
-  width: 6px;
-}
-#timeline::-webkit-scrollbar-thumb {
-  background: rgba(255,255,255,0.3);
-}
-
+/* POST FIX */
 .post {
   min-height: 100vh;
   scroll-snap-align: start;
@@ -42,23 +44,23 @@ body {
 
   gap: 12px;
 
-  opacity: 0.4;
-  transform: scale(0.95);
-  transition: 0.4s;
+  position: relative;
+  z-index: 20;
+
+  opacity: 1; /* 🔥 BUG FIX */
 }
 
-.post.active {
-  opacity: 1;
-  transform: scale(1);
+/* SIDEBAR FIX */
+.sidebar {
+  width: 30%;
+  position: fixed;
+  right: 0;
+  height: 100vh;
+  padding: 40px;
+  z-index: 5;
 }
 
-.post:hover {
-  transform: scale(1.02);
-  opacity: 0.85;
-  cursor: pointer;
-}
-
-/* SLIDER */
+/* SLIDER FIX */
 .slider {
   width: 60%;
   position: relative;
@@ -84,7 +86,6 @@ body {
   background: rgba(0,0,0,0.6);
   border: none;
   color: white;
-  padding: 6px;
   cursor: pointer;
 }
 
@@ -97,68 +98,12 @@ body {
   text-align: center;
 }
 
-.text-box p {
-  white-space: pre-line;
-}
-
-/* SIDEBAR */
-.sidebar {
-  width: 30%;
-  position: fixed;
-  right: 0;
-  height: 100vh;
-  padding: 60px 40px;
-}
-
 /* MODAL */
 .modal {
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.95);
   z-index: 999;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
-.hidden {
-  display: none;
-}
-
-.modal-content {
-  width: 80%;
-  max-height: 90vh;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.modal-text {
-  text-align: center;
-}
-
-#modal-slider img,
-#modal-slider video {
-  width: 100%;
-  max-height: 60vh;
-  object-fit: contain;
-}
-
-.audio-ui audio {
-  width: 100%;
-  filter: invert(1);
-}
-
-.close-btn {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background: white;
-  border: none;
-  font-size: 22px;
-  width: 40px;
-  height: 40px;
-  cursor: pointer;
-  border-radius: 50%;
-}
+.hidden { display: none; }

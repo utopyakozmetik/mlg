@@ -4,16 +4,16 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   renderRansom("FALAN FİLAN");
 
-  posts = await fetch("/posts.json").then(r => r.json());
+  const res = await fetch("/posts.json");
+  posts = await res.json();
 
+  /* 🔥 SAFE SORT */
   posts.sort((a,b)=>
     new Date(b.date+"T00:00:00") - new Date(a.date+"T00:00:00")
   );
 
   renderFeed(posts);
   observeActive();
-
-  document.querySelector(".close-btn")?.addEventListener("click", closeModal);
 });
 
 /* RANSOM */
@@ -74,7 +74,7 @@ function createSlider(media){
   return wrap;
 }
 
-/* FEED */
+/* FEED FIX */
 function renderFeed(data){
 
   const t = document.getElementById("timeline");
@@ -92,18 +92,11 @@ function renderFeed(data){
     const box = document.createElement("div");
     box.className = "text-box";
 
-    const title = document.createElement("h2");
-    title.textContent = p.title;
-
-    const date = document.createElement("small");
-    date.textContent = p.date;
-
-    const desc = document.createElement("p");
-    desc.textContent = p.description || "";
-
-    box.appendChild(title);
-    box.appendChild(date);
-    box.appendChild(desc);
+    box.innerHTML = `
+      <h2>${p.title}</h2>
+      <small>${p.date}</small>
+      <p>${p.description || ""}</p>
+    `;
 
     post.appendChild(box);
 
@@ -114,78 +107,19 @@ function renderFeed(data){
       post.appendChild(audio);
     }
 
-    /* FULLSCREEN */
-    post.onclick = () => openModal(p);
-
     t.appendChild(post);
   });
 }
 
-/* ACTIVE */
+/* ACTIVE POST */
 function observeActive(){
   const posts = document.querySelectorAll(".post");
 
-  const obs = new IntersectionObserver(e=>{
-    e.forEach(x=>{
-      x.target.classList.toggle("active", x.isIntersecting);
+  const obs = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      e.target.style.opacity = e.isIntersecting ? "1" : "0.5";
     });
   },{threshold:0.6});
 
   posts.forEach(p=>obs.observe(p));
-}
-
-/* MODAL OPEN */
-function openModal(p){
-
-  const m = document.getElementById("modal");
-  m.classList.remove("hidden");
-
-  m.innerHTML = `
-    <div class="modal-content">
-
-      <button class="close-btn">×</button>
-
-      <div id="modal-slider"></div>
-
-      <div class="modal-text">
-        <h1>${p.title}</h1>
-        <small>${p.date}</small>
-        <p>${p.description || ""}</p>
-      </div>
-
-      <div class="audio-ui">
-        <audio controls src="${p.audio || ""}"></audio>
-      </div>
-
-    </div>
-  `;
-
-  let i = 0;
-
-  const container = document.getElementById("modal-slider");
-
-  const slides = (p.images || []).map(src=>{
-    const el = document.createElement(src.includes(".mp4") ? "video" : "img");
-    el.src = src;
-    return el;
-  });
-
-  function render(){
-    container.innerHTML = "";
-    if(slides[i]) container.appendChild(slides[i]);
-  }
-
-  container.onclick = ()=>{
-    i = (i + 1) % slides.length;
-    render();
-  };
-
-  render();
-
-  document.querySelector(".close-btn").onclick = closeModal;
-}
-
-/* CLOSE */
-function closeModal(){
-  document.getElementById("modal").classList.add("hidden");
 }
