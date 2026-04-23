@@ -1,4 +1,3 @@
-
 let posts = [];
 let current = 0;
 
@@ -57,7 +56,6 @@ function createSlider(media){
   const slides = media.map(src => {
 
     let el;
-
     if(!src) return null;
 
     if(src.endsWith(".mp4")){
@@ -91,8 +89,9 @@ function createSlider(media){
   const prev = document.createElement("button");
   const next = document.createElement("button");
 
-  prev.textContent = "<";
-  next.textContent = ">";
+  /* UX UPGRADE LABEL */
+  prev.textContent = "◀ Önceki";
+  next.textContent = "Sonraki ▶";
 
   prev.onclick = (e) => {
     e.stopPropagation();
@@ -146,6 +145,7 @@ function renderFeed(data){
       const audio = document.createElement("audio");
       audio.src = p.audio;
       audio.controls = true;
+      audio.preload = "auto";
       post.appendChild(audio);
     }
 
@@ -203,7 +203,7 @@ function openModal(index){
     }
 
     el.style.maxWidth = "100%";
-    el.style.maxHeight = "60vh";
+    el.style.maxHeight = "80vh";
     el.style.display = "none";
 
     return el;
@@ -224,8 +224,8 @@ function openModal(index){
   const prev = document.createElement("button");
   const next = document.createElement("button");
 
-  prev.textContent = "<";
-  next.textContent = ">";
+  prev.textContent = "◀ Önceki Gönderi";
+  next.textContent = "Sonraki Gönderi ▶";
 
   prev.onclick = () => {
     i = (i - 1 + slides.length) % slides.length;
