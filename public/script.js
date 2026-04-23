@@ -1,3 +1,4 @@
+
 let posts = [];
 let current = 0;
 
@@ -7,7 +8,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   posts = await loadPosts();
 
-  posts.sort((a,b)=> new Date(b.date) - new Date(a.date));
+  posts = posts.sort((a,b)=>
+    new Date(b.date) - new Date(a.date)
+  );
 
   renderFeed(posts);
 
@@ -16,29 +19,36 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 /* LOAD */
 async function loadPosts(){
-  const res = await fetch("/posts.json");
-  return await res.json();
+  try {
+    const res = await fetch("/posts.json");
+    return await res.json();
+  } catch (e) {
+    console.error("JSON LOAD ERROR", e);
+    return [];
+  }
 }
 
-/* RANSOM OPTION B */
+/* RANSOM */
 function renderRansom(text){
   const el = document.getElementById("sidebar-title");
 
   let arr = text.split("");
   let i = 0;
 
-  setInterval(()=>{
+  setInterval(() => {
     i = (i + 1) % arr.length;
 
     el.textContent =
       arr.slice(i).join("") +
       " " +
-      arr.slice(0,i).join("");
+      arr.slice(0, i).join("");
 
-  },150);
+  }, 150);
 }
 
-/* SLIDER */
+/* =========================
+   SLIDER ENGINE (FIXED)
+========================= */
 function createSlider(media){
 
   const wrap = document.createElement("div");
@@ -46,9 +56,11 @@ function createSlider(media){
 
   let i = 0;
 
-  const slides = media.map(src=>{
+  const slides = media.map(src => {
 
     let el;
+
+    if(!src) return null;
 
     if(src.endsWith(".mp4")){
       el = document.createElement("video");
@@ -64,10 +76,13 @@ function createSlider(media){
 
     el.className = "slide";
     return el;
-  });
+  }).filter(Boolean);
 
   function render(){
-    slides.forEach(s=>s.classList.remove("active"));
+    slides.forEach(s => s.classList.remove("active"));
+
+    if(!slides[i]) return;
+
     slides[i].classList.add("active");
 
     if(slides[i].tagName === "VIDEO"){
@@ -81,19 +96,19 @@ function createSlider(media){
   prev.textContent = "<";
   next.textContent = ">";
 
-  prev.onclick = e=>{
+  prev.onclick = (e) => {
     e.stopPropagation();
     i = (i - 1 + slides.length) % slides.length;
     render();
   };
 
-  next.onclick = e=>{
+  next.onclick = (e) => {
     e.stopPropagation();
     i = (i + 1) % slides.length;
     render();
   };
 
-  slides.forEach(s=>wrap.appendChild(s));
+  slides.forEach(s => wrap.appendChild(s));
   wrap.appendChild(prev);
   wrap.appendChild(next);
 
@@ -101,13 +116,15 @@ function createSlider(media){
   return wrap;
 }
 
-/* FEED */
+/* =========================
+   FEED
+========================= */
 function renderFeed(data){
 
   const t = document.getElementById("timeline");
   t.innerHTML = "";
 
-  data.forEach((p,index)=>{
+  data.forEach((p,index) => {
 
     const post = document.createElement("div");
     post.className = "post";
@@ -129,10 +146,12 @@ function renderFeed(data){
 
     post.appendChild(box);
 
+    /* AUDIO FIX */
     if(p.audio){
       const audio = document.createElement("audio");
       audio.src = p.audio;
       audio.controls = true;
+      audio.preload = "auto";
       post.appendChild(audio);
     }
 
@@ -140,20 +159,30 @@ function renderFeed(data){
   });
 }
 
-/* ACTIVE */
+/* =========================
+   ACTIVE POST HIGHLIGHT
+========================= */
 function observeActive(){
+
   const postsEl = document.querySelectorAll(".post");
 
-  const obs = new IntersectionObserver(e=>{
-    e.forEach(el=>{
-      el.target.classList.toggle("active", el.isIntersecting);
+  const obs = new IntersectionObserver(entries => {
+
+    entries.forEach(entry => {
+      entry.target.classList.toggle(
+        "active",
+        entry.isIntersecting
+      );
     });
+
   }, { threshold: 0.6 });
 
-  postsEl.forEach(p=>obs.observe(p));
+  postsEl.forEach(p => obs.observe(p));
 }
 
-/* MODAL */
+/* =========================
+   MODAL (FULL SLIDER FIXED)
+========================= */
 function openModal(index){
 
   current = index;
@@ -165,21 +194,67 @@ function openModal(index){
 
   media.innerHTML = "";
 
-  if(p.images?.length){
-    const src = p.images[0];
+  if(!p.images?.length) return;
+
+  let i = 0;
+
+  const slides = p.images.map(src => {
+
+    let el;
 
     if(src.endsWith(".mp4")){
-      const v = document.createElement("video");
-      v.src = src;
-      v.controls = true;
-      v.autoplay = true;
-      media.appendChild(v);
+      el = document.createElement("video");
+      el.src = src;
+      el.muted = true;
+      el.loop = true;
+      el.playsInline = true;
+      el.controls = true;
     } else {
-      const img = document.createElement("img");
-      img.src = src;
-      media.appendChild(img);
+      el = document.createElement("img");
+      el.src = src;
+    }
+
+    el.style.maxWidth = "100%";
+    el.style.maxHeight = "60vh";
+    el.style.display = "none";
+
+    return el;
+  });
+
+  function render(){
+    slides.forEach(s => s.style.display = "none");
+
+    if(!slides[i]) return;
+
+    slides[i].style.display = "block";
+
+    if(slides[i].tagName === "VIDEO"){
+      slides[i].play().catch(()=>{});
     }
   }
+
+  const prev = document.createElement("button");
+  const next = document.createElement("button");
+
+  prev.textContent = "<";
+  next.textContent = ">";
+
+  prev.onclick = () => {
+    i = (i - 1 + slides.length) % slides.length;
+    render();
+  };
+
+  next.onclick = () => {
+    i = (i + 1) % slides.length;
+    render();
+  };
+
+  media.appendChild(prev);
+  media.appendChild(next);
+
+  slides.forEach(s => media.appendChild(s));
+
+  render();
 
   text.innerHTML = `
     <h2>${p.title}</h2>
@@ -191,8 +266,9 @@ function openModal(index){
 }
 
 /* CLOSE */
-document.getElementById("closeModal").onclick = () =>
+document.getElementById("closeModal").onclick = () => {
   document.getElementById("modal").classList.add("hidden");
+};
 
 /* NAV */
 document.getElementById("nextPost").onclick = () => {
