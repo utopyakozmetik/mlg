@@ -1,3 +1,4 @@
+
 body {
   margin: 0;
   background: black;
@@ -5,7 +6,6 @@ body {
   font-family: sans-serif;
 }
 
-/* BACKGROUND FIX */
 #bg {
   position: fixed;
   inset: 0;
@@ -13,26 +13,21 @@ body {
   z-index: -1;
 }
 
-/* LAYOUT FIX */
+/* LAYOUT */
 .container {
   display: flex;
 }
 
-/* TIMELINE CRITICAL FIX */
+/* TIMELINE */
 #timeline {
   width: 70%;
   height: 100vh;
   overflow-y: auto;
   scroll-snap-type: y mandatory;
-
   position: relative;
-  z-index: 10;
-
-  display: flex;
-  flex-direction: column;
 }
 
-/* POST FIX */
+/* POST */
 .post {
   min-height: 100vh;
   scroll-snap-align: start;
@@ -44,23 +39,19 @@ body {
 
   gap: 12px;
 
-  position: relative;
-  z-index: 20;
-
-  opacity: 1; /* 🔥 BUG FIX */
+  opacity: 1;
 }
 
-/* SIDEBAR FIX */
+/* SIDEBAR */
 .sidebar {
   width: 30%;
   position: fixed;
   right: 0;
   height: 100vh;
   padding: 40px;
-  z-index: 5;
 }
 
-/* SLIDER FIX */
+/* SLIDER */
 .slider {
   width: 60%;
   position: relative;
@@ -83,7 +74,7 @@ body {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(0,0,0,0.6);
+  background: rgba(0,0,0,0.5);
   border: none;
   color: white;
   cursor: pointer;
@@ -96,6 +87,11 @@ body {
 .text-box {
   width: 60%;
   text-align: center;
+}
+
+.text-box p {
+  white-space: pre-line;
+  line-height: 1.5;
 }
 
 /* MODAL */

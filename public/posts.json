@@ -8,42 +8,21 @@
       "/assets/images/post1/foto3.jpg",
       "/assets/images/post1/foto4.jpg"
     ],
-    "description": "Benim yurdumda ve evimde hiç kimse ümitsizliğe kapılmamalı, kendi bölgemde korurum herkesi
-kendi yabanıl hayvanlarından. İşte budur size sunduğum ilk şey: güvenlik!
-İkincisi de: serçeparmağımdır. Ve bir kere onu aldınız mı, elimin tümünü de alın, pekâlâ, yüreğimi
-de alın! Hoş geldiniz buraya, hoş geldiniz, misafir dostlarım!”
-Böyle söyledi Zerdüşt ve sevgiyle ve hınzırlıkla güldü. Bu selamlamadan sonra misafirleri önünde
-tekrar eğildiler ve saygıyla sustular; ama sağdaki kral hepsinin adına yanıt verdi.
-“Ey Zerdüşt, bize elini uzatıp selam verişinden anlıyoruz Zerdüşt olduğunu. Alçaldın karşımızda;
-saygımızı incitiyordun nerdeyse –:
-– ama kim senin gibi böyle bir gururla alçalabilir? Bu yüreklendiriyor bizi, ferahlatıyor gözümüzü,
-yüreğimizi.
-Sırf bunu görmek için seve seve çıkarız bundan daha da yüksek dağlara. Görmek isteyenler olarak
-geldik bulanık gözleri aydınlatanın ne olduğunu görmeye.
-Bak, çoktan kesildi yardım çığlıklarımız. Çoktan açıldı ve büyülendi zihnimiz ve yüreğimiz: Az
-kaldı, neredeyse coşacak cesaretimiz.
-",
+    "description": "Benim yurdumda ve evimde hiç kimse ümitsizliğe kapılmamalı, kendi bölgemde korurum herkesi kendi yabanıl hayvanlarından. İşte budur size sunduğum ilk şey: güvenlik! İkincisi de: serçeparmağımdır. Ve bir kere onu aldınız mı, elimin tümünü de alın, yüreğimi de alın! Hoş geldiniz buraya, misafir dostlarım! Böyle söyledi Zerdüşt ve sevgiyle güldü."
+    ,
     "audio": "/assets/audio/track1.mp3"
   },
+
   {
     "title": "Gezgin Ruh",
     "date": "2026-04-22",
     "images": [
-"/assets/images/post2/foto1.jpg",
+      "/assets/images/post2/foto1.jpg",
       "/assets/images/post2/foto2.jpg",
       "/assets/images/post2/foto3.jpg",
       "/assets/images/post2/foto4.jpg",
       "/assets/videos/post2/video1.mp4"
     ],
-    "description": "Yüce, güçlü bir istemden daha sevindirici bir şey yetişmez yeryüzünde, ey Zerdüşt: yeryüzünün en
-güzel bitkisidir bu. Tüm bir yöre canlanır böyle bir ağaç sayesinde.
-Senin gibi büyüyen birini bir çam ağacına benzetirim, ey Zerdüşt: uzun, suskun, sert, yalnız, en
-esnek odundan, azametli, –
-– ama sonunda güçlü yeşil dallarıyla uzanır kendi hükümdarlığına, zorlu sorular sorar rüzgârlara,
-fırtınalara ve yükseklerde bulunan her şeye,
-– güçlü yanıtlar vererek emir veren, muzaffer biri; böyle ağaçları görmek için kim yüksek dağlara
-çıkmaz ki?
-Buradaki ağacın, ey Zerdüşt, en kederlileri, en beceriksizleri bile canlandırır; senin bakışların en
-huzursuz kişi için bile güvenliktir, onun yüreğine şifa verir."
+    "description": "Yüce, güçlü bir istemden daha sevindirici bir şey yoktur. Senin gibi büyüyen biri çam ağacına benzer; uzun, suskun ve güçlü."
   }
 ]

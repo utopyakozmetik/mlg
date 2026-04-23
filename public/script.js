@@ -1,20 +1,30 @@
+
 let posts = [];
 
 document.addEventListener("DOMContentLoaded", async () => {
 
   renderRansom("FALAN FİLAN");
 
-  const res = await fetch("/posts.json");
-  posts = await res.json();
+  posts = await loadPosts();
 
-  /* 🔥 SAFE SORT */
   posts.sort((a,b)=>
-    new Date(b.date+"T00:00:00") - new Date(a.date+"T00:00:00")
+    new Date(b.date) - new Date(a.date)
   );
 
   renderFeed(posts);
-  observeActive();
 });
+
+/* LOAD SAFE */
+async function loadPosts(){
+  try {
+    const res = await fetch("/posts.json");
+    if(!res.ok) throw new Error("JSON yok");
+    return await res.json();
+  } catch(e){
+    console.error(e);
+    return [];
+  }
+}
 
 /* RANSOM */
 function renderRansom(text){
@@ -28,7 +38,7 @@ function renderRansom(text){
   });
 }
 
-/* SLIDER */
+/* SLIDER ENGINE */
 function createSlider(media){
 
   const wrap = document.createElement("div");
@@ -37,10 +47,22 @@ function createSlider(media){
   let i = 0;
 
   const slides = media.map(src=>{
-    const el = document.createElement(src.includes(".mp4") ? "video" : "img");
-    el.src = src;
-    el.className = "slide";
-    return el;
+
+    if(src.endsWith(".mp4")){
+      const v = document.createElement("video");
+      v.src = src;
+      v.muted = true;
+      v.loop = true;
+      v.playsInline = true;
+      v.controls = true;
+      v.className = "slide";
+      return v;
+    }
+
+    const img = document.createElement("img");
+    img.src = src;
+    img.className = "slide";
+    return img;
   });
 
   function render(){
@@ -74,7 +96,7 @@ function createSlider(media){
   return wrap;
 }
 
-/* FEED FIX */
+/* FEED */
 function renderFeed(data){
 
   const t = document.getElementById("timeline");
@@ -109,17 +131,4 @@ function renderFeed(data){
 
     t.appendChild(post);
   });
-}
-
-/* ACTIVE POST */
-function observeActive(){
-  const posts = document.querySelectorAll(".post");
-
-  const obs = new IntersectionObserver(entries=>{
-    entries.forEach(e=>{
-      e.target.style.opacity = e.isIntersecting ? "1" : "0.5";
-    });
-  },{threshold:0.6});
-
-  posts.forEach(p=>obs.observe(p));
 }
