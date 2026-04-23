@@ -23,7 +23,7 @@ async function loadPosts(){
     const res = await fetch("/posts.json");
     return await res.json();
   } catch (e) {
-    console.error("JSON LOAD ERROR", e);
+    console.error(e);
     return [];
   }
 }
@@ -46,9 +46,7 @@ function renderRansom(text){
   }, 150);
 }
 
-/* =========================
-   SLIDER ENGINE (FIXED)
-========================= */
+/* SLIDER */
 function createSlider(media){
 
   const wrap = document.createElement("div");
@@ -116,15 +114,13 @@ function createSlider(media){
   return wrap;
 }
 
-/* =========================
-   FEED
-========================= */
+/* FEED */
 function renderFeed(data){
 
   const t = document.getElementById("timeline");
   t.innerHTML = "";
 
-  data.forEach((p,index) => {
+  data.forEach((p,index)=>{
 
     const post = document.createElement("div");
     post.className = "post";
@@ -146,12 +142,10 @@ function renderFeed(data){
 
     post.appendChild(box);
 
-    /* AUDIO FIX */
     if(p.audio){
       const audio = document.createElement("audio");
       audio.src = p.audio;
       audio.controls = true;
-      audio.preload = "auto";
       post.appendChild(audio);
     }
 
@@ -159,20 +153,15 @@ function renderFeed(data){
   });
 }
 
-/* =========================
-   ACTIVE POST HIGHLIGHT
-========================= */
+/* ACTIVE */
 function observeActive(){
 
   const postsEl = document.querySelectorAll(".post");
 
   const obs = new IntersectionObserver(entries => {
 
-    entries.forEach(entry => {
-      entry.target.classList.toggle(
-        "active",
-        entry.isIntersecting
-      );
+    entries.forEach(e => {
+      e.target.classList.toggle("active", e.isIntersecting);
     });
 
   }, { threshold: 0.6 });
@@ -180,12 +169,11 @@ function observeActive(){
   postsEl.forEach(p => obs.observe(p));
 }
 
-/* =========================
-   MODAL (FULL SLIDER FIXED)
-========================= */
+/* MODAL */
 function openModal(index){
 
   current = index;
+
   const p = posts[index];
 
   const modal = document.getElementById("modal");
@@ -207,8 +195,8 @@ function openModal(index){
       el.src = src;
       el.muted = true;
       el.loop = true;
-      el.playsInline = true;
       el.controls = true;
+      el.playsInline = true;
     } else {
       el = document.createElement("img");
       el.src = src;
@@ -266,9 +254,8 @@ function openModal(index){
 }
 
 /* CLOSE */
-document.getElementById("closeModal").onclick = () => {
-  document.getElementById("modal").classList.add("hidden");
-};
+document.getElementById("closeModal").onclick =
+  () => document.getElementById("modal").classList.add("hidden");
 
 /* NAV */
 document.getElementById("nextPost").onclick = () => {

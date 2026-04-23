@@ -1,11 +1,16 @@
+
+/* BODY */
 body {
   margin: 0;
   background: black;
   color: white;
-  overflow: hidden;
   font-family: sans-serif;
+
+  overflow-x: hidden;
+  overflow-y: hidden;
 }
 
+/* BACKGROUND */
 #bg {
   position: fixed;
   inset: 0;
@@ -15,26 +20,30 @@ body {
   background-position: center;
   background-repeat: no-repeat;
 
-  z-index: -10;
+  z-index: -5;
   pointer-events: none;
 }
 
+/* LAYOUT */
 .container {
   display: flex;
   height: 100vh;
+  overflow: hidden;
 }
 
 /* FEED */
 #timeline {
   width: 70%;
   height: 100vh;
-  overflow-y: scroll;
+
+  overflow-y: auto;
   scroll-snap-type: y mandatory;
 }
 
 /* POST */
 .post {
   height: 100vh;
+
   scroll-snap-align: start;
 
   display: flex;
@@ -45,11 +54,12 @@ body {
   gap: 10px;
 
   position: relative;
+  transition: transform 0.3s ease;
 }
 
 .post.active {
   transform: scale(1.02);
-  filter: drop-shadow(0 0 20px rgba(255,255,255,0.2));
+  filter: drop-shadow(0 0 25px rgba(255,255,255,0.25));
 }
 
 /* SLIDER */
@@ -57,12 +67,14 @@ body {
   width: 60%;
   height: 350px;
   position: relative;
+  overflow: hidden;
 }
 
 .slide {
   width: 100%;
   height: 100%;
   object-fit: cover;
+
   display: none;
 }
 
@@ -70,16 +82,21 @@ body {
   display: block;
 }
 
-/* BUTTONS */
+/* SLIDER BUTTONS */
 .slider button {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
+
+  width: 35px;
+  height: 35px;
+
   background: rgba(0,0,0,0.6);
   border: none;
   color: white;
-  width: 30px;
-  height: 30px;
+
+  z-index: 5;
+  cursor: pointer;
 }
 
 .prev { left: 10px; }
@@ -100,6 +117,7 @@ audio {
 .sidebar {
   width: 30%;
   height: 100vh;
+
   position: sticky;
   top: 0;
 
@@ -112,8 +130,6 @@ audio {
 }
 
 #sidebar-title {
-  position: relative;
-  left: 25px;
   font-size: 20px;
   white-space: nowrap;
 }
@@ -122,7 +138,9 @@ audio {
 .modal {
   position: fixed;
   inset: 0;
+
   background: rgba(0,0,0,0.95);
+
   z-index: 999;
 
   display: flex;
@@ -135,6 +153,7 @@ audio {
 .modal-content {
   width: 80%;
   height: 80%;
+
   position: relative;
 
   display: flex;
@@ -155,16 +174,34 @@ audio {
   text-align: center;
 }
 
+/* MODAL BUTTONS */
 #closeModal,
 #prevPost,
 #nextPost {
   position: absolute;
+
   background: rgba(255,255,255,0.1);
   color: white;
+
   border: none;
   cursor: pointer;
+
+  z-index: 10;
 }
 
-#closeModal { top: 10px; right: 10px; }
-#prevPost { left: 10px; top: 50%; transform: translateY(-50%); }
-#nextPost { right: 10px; top: 50%; transform: translateY(-50%); }
+#closeModal {
+  top: 10px;
+  right: 10px;
+}
+
+#prevPost {
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+#nextPost {
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
