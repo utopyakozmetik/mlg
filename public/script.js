@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   posts = await loadPosts();
 
+  /* 🔥 DATE FIX (GERÇEK SORT) */
   posts.sort((a,b)=>
     new Date(b.date) - new Date(a.date)
   );
@@ -18,10 +19,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 async function loadPosts(){
   try {
     const res = await fetch("/posts.json");
-    if(!res.ok) throw new Error("JSON yok");
     return await res.json();
   } catch(e){
-    console.error(e);
+    console.error("JSON ERROR", e);
     return [];
   }
 }
@@ -38,7 +38,7 @@ function renderRansom(text){
   });
 }
 
-/* SLIDER ENGINE */
+/* SLIDER FIX */
 function createSlider(media){
 
   const wrap = document.createElement("div");
@@ -55,7 +55,7 @@ function createSlider(media){
       v.loop = true;
       v.playsInline = true;
       v.controls = true;
-      v.className = "slide";
+      v.className = "slide active";
       return v;
     }
 
@@ -121,13 +121,6 @@ function renderFeed(data){
     `;
 
     post.appendChild(box);
-
-    if(p.audio){
-      const audio = document.createElement("audio");
-      audio.controls = true;
-      audio.src = p.audio;
-      post.appendChild(audio);
-    }
 
     t.appendChild(post);
   });
