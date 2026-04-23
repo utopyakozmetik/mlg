@@ -1,118 +1,123 @@
+
 let posts = [];
 
 document.addEventListener("DOMContentLoaded", async () => {
 
   renderRansom("FALAN FİLAN");
 
-  posts = await fetch("/posts.json").then(r => r.json());
+  posts = await fetch("/posts.json").then(r=>r.json());
 
-  /* 🔥 DATE FIX */
-  posts.sort((a, b) => {
-    return new Date(b.date + "T00:00:00") - new Date(a.date + "T00:00:00");
-  });
+  posts.sort((a,b)=> new Date(b.date+"T00:00:00") - new Date(a.date+"T00:00:00"));
 
   renderFeed(posts);
   observeActive();
 });
 
-/* RANSOM */
+/* RANSOM TEXT */
 function renderRansom(text){
   const el = document.getElementById("sidebar-title");
   el.innerHTML = "";
 
-  [...text].forEach(c=>{
-    const s = document.createElement("span");
-    s.textContent = c;
-    el.appendChild(s);
-  });
+  for(let char of text){
+    if(char===" "){
+      el.appendChild(document.createTextNode(" "));
+      continue;
+    }
+
+    const up = char.toUpperCase();
+
+    const img = document.createElement("img");
+    img.src = `/ransom/${up}${Math.random()>0.5?1:2}.png`;
+
+    const span = document.createElement("span");
+    span.className="ransom-char";
+    span.appendChild(img);
+
+    el.appendChild(span);
+  }
 }
 
 /* SLIDER */
 function createSlider(media){
-  const wrap = document.createElement("div");
-  wrap.className = "slider";
+  const wrap=document.createElement("div");
+  wrap.className="slider";
 
-  let i = 0;
+  let i=0;
 
   const slides = media.map(src=>{
-    const el = document.createElement(src.includes(".mp4") ? "video" : "img");
+    const el = document.createElement(src.includes(".mp4")?"video":"img");
     el.src = src;
-    el.className = "slide";
+    el.className="slide";
     return el;
   });
 
-  const prev = document.createElement("button");
-  prev.className = "prev";
-  prev.innerText = "<";
+  const prev=document.createElement("button");
+  prev.innerText="<";
 
-  const next = document.createElement("button");
-  next.className = "next";
-  next.innerText = ">";
-
-  const counter = document.createElement("div");
-  counter.className = "counter";
+  const next=document.createElement("button");
+  next.innerText=">";
 
   function render(){
-    slides.forEach(s => s.classList.remove("active"));
+    slides.forEach(s=>s.classList.remove("active"));
     slides[i].classList.add("active");
-    counter.innerText = `${i+1} / ${slides.length}`;
   }
 
-  prev.onclick = () => {
-    i = (i - 1 + slides.length) % slides.length;
+  prev.onclick=(e)=>{
+    e.stopPropagation();
+    i=(i-1+slides.length)%slides.length;
     render();
   };
 
-  next.onclick = () => {
-    i = (i + 1) % slides.length;
+  next.onclick=(e)=>{
+    e.stopPropagation();
+    i=(i+1)%slides.length;
     render();
   };
 
-  slides.forEach(s => wrap.appendChild(s));
+  slides.forEach(s=>wrap.appendChild(s));
   wrap.appendChild(prev);
   wrap.appendChild(next);
-  wrap.appendChild(counter);
 
-  /* 🔥 CLICK BUG FIX */
-  wrap.addEventListener("click", e => e.stopPropagation());
+  wrap.onclick=()=>openModal(media);
 
   render();
-
   return wrap;
 }
 
 /* FEED */
 function renderFeed(data){
-  const t = document.getElementById("timeline");
-  t.innerHTML = "";
+  const t=document.getElementById("timeline");
+  t.innerHTML="";
 
-  data.forEach((p,i)=>{
-    const d = document.createElement("div");
-    d.className = "post";
+  data.forEach(p=>{
+    const d=document.createElement("div");
+    d.className="post";
 
-    /* SLIDER */
-    const slider = createSlider(p.images);
+    const slider=createSlider(p.images);
     d.appendChild(slider);
 
-    /* TEXT (NO innerHTML bug) */
-    const title = document.createElement("h2");
-    title.textContent = p.title;
+    const box=document.createElement("div");
+    box.className="text-box";
 
-    const date = document.createElement("small");
-    date.textContent = p.date;
+    const title=document.createElement("div");
+    renderRansomText(p.title, title);
 
-    const desc = document.createElement("p");
-    desc.textContent = p.description || "";
+    const date=document.createElement("small");
+    date.textContent=p.date;
 
-    d.appendChild(title);
-    d.appendChild(date);
-    d.appendChild(desc);
+    const desc=document.createElement("p");
+    desc.textContent=p.description;
 
-    /* AUDIO */
+    box.appendChild(title);
+    box.appendChild(date);
+    box.appendChild(desc);
+
+    d.appendChild(box);
+
     if(p.audio){
-      const a = document.createElement("audio");
-      a.controls = true;
-      a.src = p.audio;
+      const a=document.createElement("audio");
+      a.controls=true;
+      a.src=p.audio;
       d.appendChild(a);
     }
 
@@ -120,15 +125,59 @@ function renderFeed(data){
   });
 }
 
-/* ACTIVE GLOW */
+/* RANSOM TITLE */
+function renderRansomText(text, container){
+  for(let char of text){
+    if(char===" "){
+      container.appendChild(document.createTextNode(" "));
+      continue;
+    }
+
+    const img=document.createElement("img");
+    img.src=`/ransom/${char.toUpperCase()}1.png`;
+    img.style.height="30px";
+
+    container.appendChild(img);
+  }
+}
+
+/* ACTIVE */
 function observeActive(){
-  const posts = document.querySelectorAll(".post");
+  const posts=document.querySelectorAll(".post");
 
-  const obs = new IntersectionObserver(entries=>{
-    entries.forEach(e=>{
-      e.target.classList.toggle("active", e.isIntersecting);
+  const obs=new IntersectionObserver(e=>{
+    e.forEach(x=>{
+      x.target.classList.toggle("active",x.isIntersecting);
     });
-  }, { threshold: 0.6 });
+  },{threshold:0.6});
 
-  posts.forEach(p => obs.observe(p));
+  posts.forEach(p=>obs.observe(p));
+}
+
+/* FULLSCREEN */
+function openModal(media){
+  const m=document.createElement("div");
+  m.className="modal";
+
+  let i=0;
+
+  const img=document.createElement("img");
+  img.src=media[0];
+
+  m.appendChild(img);
+
+  m.onclick=()=>{
+    i=(i+1)%media.length;
+    img.src=media[i];
+  };
+
+  document.body.appendChild(m);
+
+  m.onclick=(e)=>{
+    e.stopPropagation();
+    i=(i+1)%media.length;
+    img.src=media[i];
+  };
+
+  m.ondblclick=()=>m.remove();
 }
