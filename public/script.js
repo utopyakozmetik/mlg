@@ -89,9 +89,9 @@ function createSlider(media){
   const prev = document.createElement("button");
   const next = document.createElement("button");
 
-  /* UX UPGRADE LABEL */
-  prev.textContent = "◀ Önceki";
-  next.textContent = "Sonraki ▶";
+  /* 🔥 SADECE FOTO NAV */
+  prev.textContent = "‹";
+  next.textContent = "›";
 
   prev.onclick = (e) => {
     e.stopPropagation();
@@ -182,67 +182,21 @@ function openModal(index){
 
   media.innerHTML = "";
 
-  if(!p.images?.length) return;
-
-  let i = 0;
-
-  const slides = p.images.map(src => {
-
-    let el;
-
-    if(src.endsWith(".mp4")){
-      el = document.createElement("video");
-      el.src = src;
-      el.muted = true;
-      el.loop = true;
-      el.controls = true;
-      el.playsInline = true;
-    } else {
-      el = document.createElement("img");
-      el.src = src;
-    }
-
-    el.style.maxWidth = "100%";
-    el.style.maxHeight = "80vh";
-    el.style.display = "none";
-
-    return el;
-  });
-
-  function render(){
-    slides.forEach(s => s.style.display = "none");
-
-    if(!slides[i]) return;
-
-    slides[i].style.display = "block";
-
-    if(slides[i].tagName === "VIDEO"){
-      slides[i].play().catch(()=>{});
-    }
+  /* 🔥 TEK SLIDER SİSTEMİ */
+  if(p.images?.length){
+    const slider = createSlider(p.images);
+    media.appendChild(slider);
   }
 
-  const prev = document.createElement("button");
-  const next = document.createElement("button");
-
-  prev.textContent = "◀ Önceki Gönderi";
-  next.textContent = "Sonraki Gönderi ▶";
-
-  prev.onclick = () => {
-    i = (i - 1 + slides.length) % slides.length;
-    render();
-  };
-
-  next.onclick = () => {
-    i = (i + 1) % slides.length;
-    render();
-  };
-
-  media.appendChild(prev);
-  media.appendChild(next);
-
-  slides.forEach(s => media.appendChild(s));
-
-  render();
+  /* 🔥 AUDIO (GERÇEKTEN EKLENDİ) */
+  if(p.audio){
+    const audio = document.createElement("audio");
+    audio.src = p.audio;
+    audio.controls = true;
+    audio.autoplay = true;
+    audio.style.marginTop = "10px";
+    media.appendChild(audio);
+  }
 
   text.innerHTML = `
     <h2>${p.title}</h2>
@@ -257,7 +211,7 @@ function openModal(index){
 document.getElementById("closeModal").onclick =
   () => document.getElementById("modal").classList.add("hidden");
 
-/* NAV */
+/* POST NAV (SADECE POST DEĞİŞTİRİR) */
 document.getElementById("nextPost").onclick = () => {
   current = (current + 1) % posts.length;
   openModal(current);

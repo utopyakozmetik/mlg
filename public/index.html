@@ -1,41 +1,62 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Feed Engine</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feed Engine</title>
+
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
+<!-- BACKGROUND -->
 <div id="bg"></div>
 
+<!-- LAYOUT -->
 <div class="container">
 
+  <!-- FEED -->
   <main id="timeline"></main>
 
+  <!-- SIDEBAR -->
   <aside class="sidebar">
     <div id="sidebar-title"></div>
-    <a href="https://sanr.bandcamp.com" target="_blank">bandcamp</a>
+
+    <!-- 🔥 link daha düzgün konumlanır -->
+    <div class="sidebar-bottom">
+      <a href="https://sanr.bandcamp.com" target="_blank" rel="noopener noreferrer">
+        sanr.bandcamp.com
+      </a>
+    </div>
   </aside>
 
 </div>
 
-<!-- MODAL -->
+<!-- =========================
+     MODAL
+========================= -->
 <div id="modal" class="modal hidden">
   <div class="modal-content">
 
+    <!-- KAPAT -->
     <button id="closeModal">✕</button>
-    <button id="prevPost">‹</button>
-    <button id="nextPost">›</button>
 
+    <!-- 🔥 GERÇEK POST NAV (büyük alan) -->
+    <button id="prevPost">← Önceki Gönderi</button>
+    <button id="nextPost">Sonraki Gönderi →</button>
+
+    <!-- MEDIA -->
     <div id="modal-media"></div>
+
+    <!-- TEXT -->
     <div id="modal-text"></div>
 
   </div>
 </div>
 
+<!-- SCRIPT -->
 <script src="script.js" defer></script>
+
 </body>
 </html>
