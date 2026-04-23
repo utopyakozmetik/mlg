@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Feed</title>
+<title>Feed Engine</title>
 <link rel="stylesheet" href="style.css">
 </head>
 
@@ -12,15 +12,29 @@
 <div id="bg"></div>
 
 <div class="container">
+
   <main id="timeline"></main>
 
   <aside class="sidebar">
     <div id="sidebar-title"></div>
     <a href="https://sanr.bandcamp.com" target="_blank">bandcamp</a>
   </aside>
+
 </div>
 
-<div id="modal" class="modal hidden"></div>
+<!-- MODAL -->
+<div id="modal" class="modal hidden">
+  <div class="modal-content">
+
+    <button id="closeModal">✕</button>
+    <button id="prevPost">‹</button>
+    <button id="nextPost">›</button>
+
+    <div id="modal-media"></div>
+    <div id="modal-text"></div>
+
+  </div>
+</div>
 
 <script src="script.js" defer></script>
 </body>

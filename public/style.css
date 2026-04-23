@@ -1,49 +1,59 @@
-
-/* BASE */
 body {
   margin: 0;
   background: black;
   color: white;
+  overflow: hidden;
   font-family: sans-serif;
 }
 
-/* BACKGROUND */
 #bg {
   position: fixed;
   inset: 0;
-  background: url("/assets/images/background/bg.png") center/cover no-repeat;
+  background: url("/assets/images/bg.jpg") center/cover no-repeat;
   z-index: -1;
 }
 
-/* LAYOUT */
 .container {
   display: flex;
+  height: 100vh;
 }
 
-/* TIMELINE */
+/* FEED */
 #timeline {
   width: 70%;
   height: 100vh;
-  overflow-y: auto;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
 }
 
-/* POST CARD (SQUARE FIX) */
+/* POST */
 .post {
-  width: 60%;
-  aspect-ratio: 1 / 1; /* 🔥 KARE */
-  margin: 40px auto;
+  height: 100vh;
+  scroll-snap-align: start;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 10px;
 
   position: relative;
-  overflow: hidden;
-
-  border-radius: 12px;
-  cursor: pointer;
 }
 
-/* IMAGE / VIDEO FULL COVER */
-.slide,
-.post video,
-.post img {
+.post.active {
+  transform: scale(1.02);
+  filter: drop-shadow(0 0 20px rgba(255,255,255,0.2));
+}
+
+/* SLIDER */
+.slider {
+  width: 60%;
+  height: 350px;
+  position: relative;
+}
+
+.slide {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -54,48 +64,53 @@ body {
   display: block;
 }
 
-/* TEXT OVERLAY (READABLE FIX) */
-.text-box {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-
-  padding: 15px;
-  background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
-
-  box-sizing: border-box;
-}
-
-/* SIDEBAR FIX */
-.sidebar {
-  width: 30%;
-  position: fixed;
-  right: 0;
-  height: 100vh;
-  padding: 40px;
-}
-
-/* SLIDER BUTTON FIX (NO STACK) */
-.slider {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-
+/* BUTTONS */
 .slider button {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  z-index: 10;
-
-  background: rgba(0,0,0,0.5);
+  background: rgba(0,0,0,0.6);
   border: none;
   color: white;
-  padding: 6px;
+  width: 30px;
+  height: 30px;
 }
 
 .prev { left: 10px; }
 .next { right: 10px; }
+
+/* TEXT */
+.text-box {
+  width: 60%;
+  text-align: center;
+}
+
+/* AUDIO */
+audio {
+  width: 60%;
+}
+
+/* SIDEBAR */
+.sidebar {
+  width: 30%;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+
+  padding: 40px;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+#sidebar-title {
+  position: relative;
+  left: 25px;
+  font-size: 20px;
+  white-space: nowrap;
+}
 
 /* MODAL */
 .modal {
@@ -103,6 +118,47 @@ body {
   inset: 0;
   background: rgba(0,0,0,0.95);
   z-index: 999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .hidden { display: none; }
+
+.modal-content {
+  width: 80%;
+  height: 80%;
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#modal-media img,
+#modal-media video {
+  max-width: 100%;
+  max-height: 60vh;
+  object-fit: contain;
+}
+
+#modal-text {
+  margin-top: 20px;
+  text-align: center;
+}
+
+#closeModal,
+#prevPost,
+#nextPost {
+  position: absolute;
+  background: rgba(255,255,255,0.1);
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+#closeModal { top: 10px; right: 10px; }
+#prevPost { left: 10px; top: 50%; transform: translateY(-50%); }
+#nextPost { right: 10px; top: 50%; transform: translateY(-50%); }
