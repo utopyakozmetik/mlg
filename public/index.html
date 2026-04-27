@@ -10,33 +10,41 @@
 
 <body>
 
+<!-- 🌐 INTRO -->
+<div id="intro">
+  <div class="intro-title">Language Selection</div>
+
+  <div class="lang-grid">
+    <div class="lang"><img src="/assets/images/lang/tr.png"></div>
+    <div class="lang"><img src="/assets/images/lang/en.png"></div>
+    <div class="lang"><img src="/assets/images/lang/fr.png"></div>
+  </div>
+</div>
+
 <div id="bg"></div>
 
 <div class="container">
 
-  <!-- SOL ARCHIVE -->
   <div id="left-archive"></div>
 
-  <!-- FEED -->
   <main id="timeline"></main>
 
-  <!-- SAĞ PANEL -->
   <aside class="sidebar">
 
     <div id="sidebar-title">
-      <img src="/assets/images/ff/falanfilan.png" alt="falan filan">
+      <img src="/assets/images/ff/falanfilan.png">
     </div>
 
-    <div class="links">
-      <div class="links-title">Linkler:</div>
+    <!-- 🎧 PLAYER -->
+    <div id="music-player">
+      <audio id="audio" controls>
+        <source src="/assets/music/sample.mp3">
+      </audio>
 
-      <a href="https://sanr.bandcamp.com" target="_blank">
-        sanr bandcamp
-      </a>
-
-      <a href="https://flamingpines.bandcamp.com/album/mnk" target="_blank">
-        FenGi album
-      </a>
+      <div class="controls">
+        <button id="prevTrack">⏮</button>
+        <button id="nextTrack">⏭</button>
+      </div>
     </div>
 
   </aside>
@@ -59,7 +67,7 @@
   </div>
 </div>
 
-<script src="script.js" defer></script>
+<script src="script.js"></script>
 
 </body>
 </html>
