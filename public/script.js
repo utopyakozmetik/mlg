@@ -6,7 +6,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   renderRansom("FALAN FİLAN");
 
   posts = await loadPosts();
-
   posts.sort((a,b)=> new Date(b.date) - new Date(a.date));
 
   renderFeed(posts);
@@ -41,14 +40,20 @@ function createSlider(media){
 
   const slides = media.map(src=>{
     let el;
+
     if(src.endsWith(".mp4")){
       el = document.createElement("video");
       el.src = src;
       el.controls = true;
+      el.muted = true;
+      el.autoplay = true;
+      el.loop = true;
+      el.playsInline = true;
     } else {
       el = document.createElement("img");
       el.src = src;
     }
+
     el.className = "slide";
     return el;
   });
@@ -102,16 +107,22 @@ function renderFeed(data){
       post.appendChild(createSlider(p.images));
     }
 
-    const box = document.createElement("div");
-    box.className = "text-box";
-    box.innerHTML = `<h2>${p.title}</h2><small>${p.date}</small>`;
+    /* OVERLAY EKLENDİ */
+    const overlay = document.createElement("div");
+    overlay.className = "overlay";
 
-    post.appendChild(box);
+    overlay.innerHTML = `
+      <h2>${p.title}</h2>
+      <p>${p.description ? p.description.slice(0,120)+"..." : ""}</p>
+    `;
+
+    post.appendChild(overlay);
+
     t.appendChild(post);
   });
 }
 
-/* ARCHIVE */
+/* ARCHIVE (DEĞİŞMEDİ) */
 function buildArchive(){
   const archive = document.getElementById("archive");
   const map = {};
@@ -155,12 +166,20 @@ function buildArchive(){
   });
 }
 
-/* ACTIVE SYNC */
+/* SCROLL VIDEO CONTROL (SIGNATURE) */
 function observeActive(){
   const postsEl = document.querySelectorAll(".post");
 
   const obs = new IntersectionObserver(entries=>{
     entries.forEach(e=>{
+      const videos = e.target.querySelectorAll("video");
+
+      if(e.isIntersecting){
+        videos.forEach(v=> v.play().catch(()=>{}));
+      } else {
+        videos.forEach(v=> v.pause());
+      }
+
       if(e.isIntersecting){
         const i = e.target.dataset.index;
 
@@ -176,13 +195,14 @@ function observeActive(){
   postsEl.forEach(p=>obs.observe(p));
 }
 
-/* MODAL */
+/* MODAL (GELİŞTİRİLDİ) */
 function openModal(index){
   current = index;
   const p = posts[index];
 
   const modal = document.getElementById("modal");
   const media = document.getElementById("modal-media");
+  const text = document.getElementById("modal-text");
 
   media.innerHTML = "";
 
@@ -198,7 +218,16 @@ function openModal(index){
     media.appendChild(audio);
   }
 
+  text.innerHTML = `
+    <div class="modal-text-inner">
+      <h2>${p.title}</h2>
+      <small>${p.date}</small>
+      <p>${p.description || ""}</p>
+    </div>
+  `;
+
   modal.classList.remove("hidden");
+  document.body.style.overflow = "hidden";
 }
 
 /* NAV */
@@ -212,5 +241,7 @@ document.getElementById("prevPost").onclick = ()=>{
   openModal(current);
 };
 
-document.getElementById("closeModal").onclick =
-  ()=> document.getElementById("modal").classList.add("hidden");
+document.getElementById("closeModal").onclick = ()=>{
+  document.getElementById("modal").classList.add("hidden");
+  document.body.style.overflow = "auto";
+};
