@@ -3,12 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Feed Engine</title>
+  <title>Multilayergod</title>
 
   <link rel="stylesheet" href="style.css">
-
-  <!-- FONT -->
-  <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -17,17 +14,31 @@
 
 <div class="container">
 
+  <!-- SOL ARCHIVE -->
+  <div id="left-archive"></div>
+
+  <!-- FEED -->
   <main id="timeline"></main>
 
+  <!-- SAĞ PANEL -->
   <aside class="sidebar">
-    <div id="sidebar-title"></div>
 
-    <!-- ARCHIVE -->
-    <div id="archive"></div>
-
-    <div class="sidebar-bottom">
-      <a href="https://sanr.bandcamp.com" target="_blank">sanr.bandcamp.com</a>
+    <div id="sidebar-title">
+      <img src="/assets/images/ff/falanfilan.png" alt="falan filan">
     </div>
+
+    <div class="links">
+      <div class="links-title">Linkler:</div>
+
+      <a href="https://sanr.bandcamp.com" target="_blank">
+        sanr bandcamp
+      </a>
+
+      <a href="https://flamingpines.bandcamp.com/album/mnk" target="_blank">
+        FenGi album
+      </a>
+    </div>
+
   </aside>
 
 </div>
@@ -37,13 +48,13 @@
   <div class="modal-content">
 
     <button id="closeModal">✕</button>
+    <button id="prevPost">←</button>
+    <button id="nextPost">→</button>
 
-    <!-- POST NAV -->
-    <button id="prevPost">← Önceki</button>
-    <button id="nextPost">Sonraki →</button>
-
-    <div id="modal-media"></div>
-    <div id="modal-text"></div>
+    <div class="modal-grid">
+      <div id="modal-media"></div>
+      <div id="modal-side"></div>
+    </div>
 
   </div>
 </div>

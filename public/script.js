@@ -2,9 +2,6 @@ let posts = [];
 let current = 0;
 
 document.addEventListener("DOMContentLoaded", async () => {
-
-  renderRansom("FALAN FİLAN");
-
   posts = await loadPosts();
   posts.sort((a,b)=> new Date(b.date) - new Date(a.date));
 
@@ -17,18 +14,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 async function loadPosts(){
   const res = await fetch("/posts.json");
   return await res.json();
-}
-
-/* RANSOM */
-function renderRansom(text){
-  const el = document.getElementById("sidebar-title");
-  let arr = text.split("");
-  let i = 0;
-
-  setInterval(()=>{
-    i = (i+1)%arr.length;
-    el.textContent = arr.slice(i).join("") + " " + arr.slice(0,i).join("");
-  },150);
 }
 
 /* SLIDER */
@@ -44,11 +29,16 @@ function createSlider(media){
     if(src.endsWith(".mp4")){
       el = document.createElement("video");
       el.src = src;
-      el.controls = true;
       el.muted = true;
       el.autoplay = true;
       el.loop = true;
       el.playsInline = true;
+      el.controls = true;
+
+      el.addEventListener("canplay", ()=>{
+        el.play().catch(()=>{});
+      });
+
     } else {
       el = document.createElement("img");
       el.src = src;
@@ -107,7 +97,6 @@ function renderFeed(data){
       post.appendChild(createSlider(p.images));
     }
 
-    /* OVERLAY EKLENDİ */
     const overlay = document.createElement("div");
     overlay.className = "overlay";
 
@@ -117,14 +106,13 @@ function renderFeed(data){
     `;
 
     post.appendChild(overlay);
-
     t.appendChild(post);
   });
 }
 
-/* ARCHIVE (DEĞİŞMEDİ) */
+/* ARCHIVE */
 function buildArchive(){
-  const archive = document.getElementById("archive");
+  const archive = document.getElementById("left-archive");
   const map = {};
 
   posts.forEach((p,i)=>{
@@ -138,26 +126,17 @@ function buildArchive(){
 
   Object.keys(map).forEach(m=>{
     const month = document.createElement("div");
-    month.className = "archive-month";
     month.textContent = m;
 
     const days = document.createElement("div");
-    days.className = "archive-days";
-
-    month.onclick = ()=> days.style.display =
-      days.style.display==="block"?"none":"block";
 
     map[m].forEach(d=>{
       const el = document.createElement("div");
-      el.className = "archive-day";
       el.textContent = `${d.day} - ${d.title}`;
-
-      el.onclick = e=>{
-        e.stopPropagation();
+      el.onclick = ()=>{
         document.querySelectorAll(".post")[d.index]
           .scrollIntoView({behavior:"smooth"});
       };
-
       days.appendChild(el);
     });
 
@@ -166,7 +145,7 @@ function buildArchive(){
   });
 }
 
-/* SCROLL VIDEO CONTROL (SIGNATURE) */
+/* OBSERVER */
 function observeActive(){
   const postsEl = document.querySelectorAll(".post");
 
@@ -175,19 +154,11 @@ function observeActive(){
       const videos = e.target.querySelectorAll("video");
 
       if(e.isIntersecting){
-        videos.forEach(v=> v.play().catch(()=>{}));
+        e.target.classList.add("active");
+        videos.forEach(v=>v.play().catch(()=>{}));
       } else {
-        videos.forEach(v=> v.pause());
-      }
-
-      if(e.isIntersecting){
-        const i = e.target.dataset.index;
-
-        document.querySelectorAll(".archive-day")
-          .forEach(d=>d.classList.remove("active"));
-
-        const day = document.querySelectorAll(".archive-day")[i];
-        if(day) day.classList.add("active");
+        e.target.classList.remove("active");
+        videos.forEach(v=>v.pause());
       }
     });
   },{threshold:0.6});
@@ -195,14 +166,14 @@ function observeActive(){
   postsEl.forEach(p=>obs.observe(p));
 }
 
-/* MODAL (GELİŞTİRİLDİ) */
+/* MODAL */
 function openModal(index){
   current = index;
   const p = posts[index];
 
   const modal = document.getElementById("modal");
   const media = document.getElementById("modal-media");
-  const text = document.getElementById("modal-text");
+  const side = document.getElementById("modal-side");
 
   media.innerHTML = "";
 
@@ -210,38 +181,28 @@ function openModal(index){
     media.appendChild(createSlider(p.images));
   }
 
+  let audioHTML = "";
+
   if(p.audio){
-    const audio = document.createElement("audio");
-    audio.src = p.audio;
-    audio.autoplay = true;
-    audio.controls = true;
-    media.appendChild(audio);
+    const name = p.audio.split("/").pop();
+    audioHTML = `
+      <div class="player">
+        <div>🎵 ${name}</div>
+        <audio src="${p.audio}" controls autoplay></audio>
+      </div>
+    `;
   }
 
-  text.innerHTML = `
-    <div class="modal-text-inner">
-      <h2>${p.title}</h2>
-      <small>${p.date}</small>
-      <p>${p.description || ""}</p>
-    </div>
+  side.innerHTML = `
+    <h2>${p.title}</h2>
+    <small>${p.date}</small>
+    <p>${p.description || ""}</p>
+    ${audioHTML}
   `;
 
   modal.classList.remove("hidden");
-  document.body.style.overflow = "hidden";
 }
 
 /* NAV */
-document.getElementById("nextPost").onclick = ()=>{
-  current = (current+1)%posts.length;
-  openModal(current);
-};
-
-document.getElementById("prevPost").onclick = ()=>{
-  current = (current-1+posts.length)%posts.length;
-  openModal(current);
-};
-
-document.getElementById("closeModal").onclick = ()=>{
-  document.getElementById("modal").classList.add("hidden");
-  document.body.style.overflow = "auto";
-};
+document.getElementById("closeModal").onclick =
+  ()=> document.getElementById("modal").classList.add("hidden");
