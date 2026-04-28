@@ -1,58 +1,35 @@
 let posts=[];
 let current=0;
 
-/* AUDIO */
-let activeMedia=null;
 const globalAudio=document.getElementById("globalAudio");
 
-function stopAll(){
-if(globalAudio) globalAudio.pause();
-if(activeMedia){
-activeMedia.pause();
-activeMedia=null;
-}
-document.querySelectorAll("video").forEach(v=>v.pause());
-}
-
-function playPostAudio(a){
-stopAll();
-activeMedia=a;
-a.play().catch(()=>{});
-}
-
-function bindVideo(v){
-v.addEventListener("play",()=>{
-stopAll();
-activeMedia=v;
-});
-}
-
-/* INTRO */
 document.addEventListener("DOMContentLoaded",()=>{
-document.querySelectorAll(".lang").forEach(l=>{
-l.onclick=init;
-});
+document.querySelectorAll(".lang").forEach(l=>l.onclick=init);
 });
 
-/* INIT */
 async function init(){
 
 document.getElementById("intro").style.display="none";
 
-posts=await fetch("posts.json").then(r=>r.json());
+try{
+const res = await fetch("posts.json");
+posts = await res.json();
+}catch(e){
+console.error("JSON ERROR:", e);
+}
+
 posts.sort((a,b)=>new Date(b.date)-new Date(a.date));
 
 render();
 buildArchive();
 setupModal();
 setupPlayer();
-
-initRansomPhysics("Kokular Ütopyasına Hoşgeldiniz");
 }
 
-/* FEED */
+/* RENDER */
 function render(){
 const t=document.getElementById("timeline");
+t.innerHTML="";
 
 posts.forEach((p,i)=>{
 const el=document.createElement("div");
@@ -78,15 +55,13 @@ let i=0;
 
 const slides=media.map(src=>{
 const el=document.createElement(src.endsWith(".mp4")?"video":"img");
-
-el.src=src;
+el.src=src; // PATH FIXED (relative)
 el.className="slide";
 
 if(el.tagName==="VIDEO"){
 el.autoplay=true;
 el.loop=true;
 el.controls=true;
-bindVideo(el);
 }
 
 wrap.appendChild(el);
@@ -104,8 +79,8 @@ const next=document.createElement("button");
 prev.className="nav-btn prev";
 next.className="nav-btn next";
 
-prev.innerHTML="← Previous";
-next.innerHTML="Next →";
+prev.innerHTML="←";
+next.innerHTML="→";
 
 prev.onclick=(e)=>{e.stopPropagation();i=(i-1+slides.length)%slides.length;show();}
 next.onclick=(e)=>{e.stopPropagation();i=(i+1)%slides.length;show();}
@@ -117,55 +92,7 @@ show();
 return wrap;
 }
 
-/* ARCHIVE */
-function buildArchive(){
-const a=document.getElementById("left-archive");
-a.innerHTML="";
-
-const map={};
-
-posts.forEach((p,i)=>{
-const d=new Date(p.date);
-const m=d.toLocaleString("tr-TR",{month:"long",year:"numeric"});
-
-if(!map[m]) map[m]=[];
-map[m].push({title:p.title,index:i});
-});
-
-Object.keys(map).forEach(m=>{
-const t=document.createElement("div");
-t.textContent=m;
-t.style.opacity=.6;
-a.appendChild(t);
-
-map[m].forEach(x=>{
-const el=document.createElement("div");
-el.textContent=x.title;
-el.onclick=()=>document.querySelectorAll(".post")[x.index].scrollIntoView({behavior:"smooth"});
-a.appendChild(el);
-});
-});
-}
-
 /* MODAL */
-function setupModal(){
-
-document.getElementById("closeModal").onclick=()=>{
-document.getElementById("modal").classList.add("hidden");
-};
-
-document.getElementById("prevPost").onclick=()=>{
-current=(current-1+posts.length)%posts.length;
-open(current);
-};
-
-document.getElementById("nextPost").onclick=()=>{
-current=(current+1)%posts.length;
-open(current);
-};
-}
-
-/* OPEN */
 function open(i){
 
 current=i;
@@ -186,119 +113,97 @@ if(p.audio){
 const a=document.createElement("audio");
 a.src=p.audio;
 a.controls=true;
-a.onplay=()=>playPostAudio(a);
 m.appendChild(a);
 }
 
-s.innerHTML=`
-<h2>${ransomText(p.title||"")}</h2>
-<p>${ransomText(p.description||"")}</p>
-`;
+s.innerHTML=`<h2>${p.title}</h2><p>${p.description}</p>`;
 
 document.getElementById("modal").classList.remove("hidden");
 }
 
-/* RANSOM TEXT */
-function ransomText(t){
+function setupModal(){
 
-const fonts=[
-"Special Elite",
-"Courier Prime",
-"IM Fell English",
-"Georgia",
-"Arial Black"
-];
+document.getElementById("closeModal").onclick=()=>{
+document.getElementById("modal").classList.add("hidden");
+};
 
-return [...t].map(c=>{
-if(c===" ") return " ";
+document.getElementById("prevPost").onclick=()=>{
+current=(current-1+posts.length)%posts.length;
+open(current);
+};
 
-const f=fonts[Math.random()*fonts.length|0];
-
-return `<span style="
-font-family:${f};
-display:inline-block;
-transform:rotate(${Math.random()*30-15}deg);
-">${c}</span>`;
-}).join("");
+document.getElementById("nextPost").onclick=()=>{
+current=(current+1)%posts.length;
+open(current);
+};
 }
 
-/* AUDIO PLAYER */
+/* ARCHIVE */
+function buildArchive(){
+const a=document.getElementById("left-archive");
+a.innerHTML="";
+
+posts.forEach((p,i)=>{
+const el=document.createElement("div");
+el.textContent=p.title;
+el.onclick=()=>document.querySelectorAll(".post")[i].scrollIntoView({behavior:"smooth"});
+a.appendChild(el);
+});
+}
+
+/* PLAYER (FIXED & SMOOTH) */
 function setupPlayer(){
 
 const tracks=[
-{src:"assets/music/track1.mp3"},
-{src:"assets/music/track2.mp3"}
+{src:"assets/music/track1.mp3", name:"Track 1"},
+{src:"assets/music/track2.mp3", name:"Track 2"}
 ];
 
 let i=0;
+let playing=false;
+
+const playBtn=document.getElementById("playPause");
+const progressBar=document.getElementById("progressBar");
+const trackName=document.getElementById("trackName");
 
 function load(){
-stopAll();
 globalAudio.src=tracks[i].src;
+trackName.innerText=tracks[i].name;
 globalAudio.play();
-activeMedia=globalAudio;
+playing=true;
+playBtn.innerText="⏸";
 }
 
-document.getElementById("prevTrack").onclick=()=>{i--;if(i<0)i=tracks.length-1;load();}
-document.getElementById("nextTrack").onclick=()=>{i++;if(i>=tracks.length)i=0;load();}
+playBtn.onclick=()=>{
+if(playing){
+globalAudio.pause();
+playBtn.innerText="▶";
+}else{
+globalAudio.play();
+playBtn.innerText="⏸";
+}
+playing=!playing;
+};
 
-globalAudio.onplay=stopAll;
+document.getElementById("prevTrack").onclick=()=>{
+i--; if(i<0)i=tracks.length-1; load();
+};
+
+document.getElementById("nextTrack").onclick=()=>{
+i++; if(i>=tracks.length)i=0; load();
+};
+
+globalAudio.ontimeupdate=()=>{
+const p=(globalAudio.currentTime/globalAudio.duration)*100;
+progressBar.style.width=p+"%";
+};
+
+document.querySelector(".progress").onclick=(e)=>{
+const rect=e.currentTarget.getBoundingClientRect();
+const x=e.clientX-rect.left;
+const ratio=x/rect.width;
+globalAudio.currentTime=ratio*globalAudio.duration;
+};
 
 load();
-}
-
-/* PHYSICS */
-const fonts=["Special Elite","Courier Prime","IM Fell English"];
-
-class L{
-constructor(c,x,y){
-this.c=c;
-this.x=x;
-this.y=y;
-this.vx=Math.random()*4-2;
-this.vy=Math.random()*2;
-
-this.el=document.createElement("div");
-this.el.className="ransom-char";
-this.el.innerText=c;
-this.el.style.fontFamily=fonts[Math.random()*fonts.length|0];
-
-document.getElementById("ransom-root").appendChild(this.el);
-}
-
-update(){
-this.vy+=0.2;
-this.x+=this.vx;
-this.y+=this.vy;
-
-this.render();
-}
-
-render(){
-this.el.style.transform=`translate(${this.x}px,${this.y}px)`;
-}
-}
-
-let letters=[];
-
-function initRansomPhysics(text){
-
-const root=document.getElementById("ransom-root");
-root.innerHTML="";
-letters=[];
-
-let x=50,y=20;
-
-[...text].forEach(c=>{
-const l=new L(c,x,y);
-letters.push(l);
-x+=15;
-});
-
-loop();
-}
-
-function loop(){
-letters.forEach(l=>l.update());
-requestAnimationFrame(loop);
 }

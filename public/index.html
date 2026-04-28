@@ -7,7 +7,6 @@
 
 <link rel="stylesheet" href="style.css">
 
-<!-- fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime&family=IM+Fell+English&display=swap" rel="stylesheet">
 </head>
 
@@ -26,31 +25,36 @@
 <!-- BG -->
 <div id="bg"></div>
 
-<!-- RANSOM PHYSICS -->
+<!-- RANSOM -->
 <div id="ransom-root"></div>
 
 <div class="container">
 
-  <!-- ARCHIVE -->
   <div id="left-archive"></div>
 
-  <!-- FEED -->
   <main id="timeline"></main>
 
-  <!-- SIDEBAR -->
   <aside class="sidebar">
 
     <img src="assets/images/ff/falanfilan.png" style="max-width:200px">
 
-    <!-- GLOBAL AUDIO -->
-    <audio id="globalAudio" controls></audio>
+    <!-- PLAYER -->
+    <div class="player">
+      <div class="track-name" id="trackName">—</div>
 
-    <div>
-      <button id="prevTrack">⏮</button>
-      <button id="nextTrack">⏭</button>
+      <div class="controls">
+        <button id="prevTrack">⏮</button>
+        <button id="playPause">▶</button>
+        <button id="nextTrack">⏭</button>
+      </div>
+
+      <div class="progress">
+        <div id="progressBar"></div>
+      </div>
     </div>
 
-    <!-- BANDCAMP -->
+    <audio id="globalAudio"></audio>
+
     <div class="links">
       <a href="https://sanr.bandcamp.com" target="_blank">Sanr Bandcamp</a>
       <a href="https://flamingpines.bandcamp.com/album/mnk" target="_blank">FenGi Album</a>
@@ -63,9 +67,9 @@
 <!-- MODAL -->
 <div id="modal" class="modal hidden">
 
-  <button id="prevPost" class="nav-btn prev">← Previous</button>
-  <button id="nextPost" class="nav-btn next">Next →</button>
-  <button id="closeModal" class="exit">Çıkış</button>
+  <button id="prevPost" class="nav-btn prev">←</button>
+  <button id="nextPost" class="nav-btn next">→</button>
+  <button id="closeModal" class="exit">✕</button>
 
   <div class="modal-grid">
     <div id="modal-media"></div>
