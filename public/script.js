@@ -11,12 +11,8 @@ async function init(){
 
 document.getElementById("intro").style.display="none";
 
-try{
 const res = await fetch("posts.json");
 posts = await res.json();
-}catch(e){
-console.error(e);
-}
 
 posts.sort((a,b)=>new Date(b.date)-new Date(a.date));
 
@@ -26,7 +22,7 @@ setupModal();
 setupPlayer();
 }
 
-/* RENDER */
+/* FEED */
 function render(){
 const t=document.getElementById("timeline");
 t.innerHTML="";
@@ -52,17 +48,15 @@ t.appendChild(el);
 }
 
 /* SLIDER */
-function createSlider(media){
+function createSlider(media, isModal=false){
 
 const wrap=document.createElement("div");
 wrap.className="slider";
 
 let i=0;
-let startX=0;
-let isDown=false;
 
 const slides=media.map(src=>{
-const isVideo = src.endsWith(".mp4");
+const isVideo=src.endsWith(".mp4");
 const el=document.createElement(isVideo?"video":"img");
 
 el.src=src;
@@ -84,7 +78,7 @@ slides.forEach(s=>s.classList.remove("active"));
 slides[i].classList.add("active");
 }
 
-/* BUTTONS */
+if(!isModal){
 const prev=document.createElement("button");
 const next=document.createElement("button");
 
@@ -99,32 +93,21 @@ next.onclick=(e)=>{e.stopPropagation();i=(i+1)%slides.length;show();}
 
 wrap.appendChild(prev);
 wrap.appendChild(next);
+}
 
-/* SWIPE */
 wrap.addEventListener("pointerdown",(e)=>{
-isDown=true;
-startX=e.clientX;
+wrap.startX=e.clientX;
 });
 
 wrap.addEventListener("pointerup",(e)=>{
-if(!isDown) return;
-
-let diff=e.clientX-startX;
+let diff=e.clientX-wrap.startX;
 
 if(Math.abs(diff)>50){
-if(diff>0){
-i=(i-1+slides.length)%slides.length;
-}else{
-i=(i+1)%slides.length;
-}
+if(diff>0) i=(i-1+slides.length)%slides.length;
+else i=(i+1)%slides.length;
 show();
 }
-
-isDown=false;
 });
-
-/* prevent page scroll */
-wrap.addEventListener("wheel",(e)=>e.stopPropagation());
 
 show();
 return wrap;
@@ -144,58 +127,77 @@ m.innerHTML="";
 s.innerHTML="";
 
 if(p.images){
-m.appendChild(createSlider(p.images));
+m.appendChild(createSlider(p.images,true));
 }
 
 if(p.audio){
 globalAudio.src=p.audio;
 globalAudio.play();
+document.getElementById("trackName").innerText=getName(p.audio);
 }
 
-s.innerHTML=`<h2>${ransomText(p.title||"")}</h2>
-<p>${ransomText(p.description||"")}</p>`;
+s.innerHTML=`
+<h2>${ransomText(p.title||"")}</h2>
+<p>${ransomText(p.description||"")}</p>
+`;
 
 document.getElementById("modal").classList.remove("hidden");
 }
 
-function setupModal(){
-
-document.getElementById("closeModal").onclick=()=>{
-document.getElementById("modal").classList.add("hidden");
-globalAudio.pause();
-};
-
-document.getElementById("prevPost").onclick=()=>{
-current=(current-1+posts.length)%posts.length;
-open(current);
-};
-
-document.getElementById("nextPost").onclick=()=>{
-current=(current+1)%posts.length;
-open(current);
-};
-}
-
-/* ARCHIVE */
+/* INDEX FULL */
 function buildArchive(){
+
 const a=document.getElementById("left-archive");
 a.innerHTML="";
 
+const groups={};
+
 posts.forEach((p,i)=>{
+const d=new Date(p.date);
+const key=d.getFullYear()+" / "+d.toLocaleString("tr-TR",{month:"long"});
+
+if(!groups[key]) groups[key]=[];
+groups[key].push({title:p.title,index:i});
+});
+
+Object.keys(groups).forEach(k=>{
+const group=document.createElement("div");
+group.className="archive-group";
+
+const title=document.createElement("div");
+title.className="archive-title";
+title.innerText=k;
+
+group.appendChild(title);
+
+groups[k].forEach(item=>{
 const el=document.createElement("div");
-el.textContent=p.title;
-el.onclick=()=>document.querySelectorAll(".post")[i].scrollIntoView({behavior:"smooth"});
-a.appendChild(el);
+el.className="archive-item";
+el.innerText=item.title;
+el.onclick=()=>document.querySelectorAll(".post")[item.index].scrollIntoView({behavior:"smooth"});
+group.appendChild(el);
+});
+
+a.appendChild(group);
 });
 }
 
-/* PLAYER */
+/* PLAYER AUTO PLAYLIST */
 function setupPlayer(){
 
-const tracks=[
-{src:"assets/music/track1.mp3", name:"Track 1"},
-{src:"assets/music/track2.mp3", name:"Track 2"}
+/* 🔥 SADECE BURAYI DOLDUR */
+const files=[
+"Gece Yuruyusu.mp3",
+"Karanlik Ambient.mp3",
+"Noise Study.mp3"
 ];
+
+const base="assets/music/";
+
+const tracks=files.map(f=>({
+src:base+f,
+name:f.replace(".mp3","")
+}));
 
 let i=0;
 let playing=false;
@@ -265,7 +267,11 @@ const f=fonts[Math.random()*fonts.length|0];
 return `<span style="
 font-family:${f};
 display:inline-block;
-transform:rotate(${Math.random()*10-5}deg);
+transform:rotate(${Math.random()*8-4}deg);
 ">${c}</span>`;
 }).join("");
+}
+
+function getName(p){
+return p.split("/").pop().replace(".mp3","");
 }
