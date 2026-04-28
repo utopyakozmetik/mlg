@@ -168,3 +168,55 @@ margin-bottom:10px;
 #modal-side span{
 letter-spacing:1px;
 }
+
+
+/* SLIDER OKLARI (anasayfa + modal) */
+.nav-btn{
+position:absolute;
+top:50%;
+transform:translateY(-50%);
+z-index:9999;
+cursor:pointer;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+/* OK GÖRSELLERİ */
+.nav-btn img{
+width:38px;
+height:auto;
+opacity:0.85;
+transition:0.2s;
+}
+
+.nav-btn img:hover{
+opacity:1;
+transform:scale(1.1);
+}
+
+/* SOL / SAĞ KONUM */
+.prev{left:10px}
+.next{right:10px}
+
+/* MODAL ÖNCEKİ / SONRAKİ POST (BÜYÜK OLAN FIX) */
+#prevPost,
+#nextPost{
+width:55px;   /* 🔥 küçültüldü */
+height:auto;
+}
+
+/* ÇIKIŞ BUTONU (BİRAZ BÜYÜTÜLDÜ) */
+.exit{
+width:70px;   /* 🔥 büyüdü */
+height:auto;
+top:20px;
+right:20px;
+z-index:10000;
+cursor:pointer;
+}
+
+/* SLIDER İÇİN GÜVENCE */
+.slider{
+position:relative;
+}
