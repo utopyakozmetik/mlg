@@ -58,6 +58,8 @@ const wrap=document.createElement("div");
 wrap.className="slider";
 
 let i=0;
+let startX=0;
+let isDown=false;
 
 const slides=media.map(src=>{
 const isVideo = src.endsWith(".mp4");
@@ -69,7 +71,6 @@ el.className="slide";
 if(isVideo){
 el.loop=true;
 el.muted=true;
-
 el.addEventListener("mouseenter",()=>el.play());
 el.addEventListener("mouseleave",()=>el.pause());
 }
@@ -83,6 +84,7 @@ slides.forEach(s=>s.classList.remove("active"));
 slides[i].classList.add("active");
 }
 
+/* BUTTONS */
 const prev=document.createElement("button");
 const next=document.createElement("button");
 
@@ -97,6 +99,32 @@ next.onclick=(e)=>{e.stopPropagation();i=(i+1)%slides.length;show();}
 
 wrap.appendChild(prev);
 wrap.appendChild(next);
+
+/* SWIPE */
+wrap.addEventListener("pointerdown",(e)=>{
+isDown=true;
+startX=e.clientX;
+});
+
+wrap.addEventListener("pointerup",(e)=>{
+if(!isDown) return;
+
+let diff=e.clientX-startX;
+
+if(Math.abs(diff)>50){
+if(diff>0){
+i=(i-1+slides.length)%slides.length;
+}else{
+i=(i+1)%slides.length;
+}
+show();
+}
+
+isDown=false;
+});
+
+/* prevent page scroll */
+wrap.addEventListener("wheel",(e)=>e.stopPropagation());
 
 show();
 return wrap;
@@ -115,21 +143,10 @@ const s=document.getElementById("modal-side");
 m.innerHTML="";
 s.innerHTML="";
 
-/* MEDIA FULLSCREEN FIX */
 if(p.images){
-p.images.forEach(src=>{
-const el=document.createElement(src.endsWith(".mp4")?"video":"img");
-el.src=src;
-
-if(el.tagName==="VIDEO"){
-el.controls=true;
+m.appendChild(createSlider(p.images));
 }
 
-m.appendChild(el);
-});
-}
-
-/* POST AUDIO AUTOPLAY */
 if(p.audio){
 globalAudio.src=p.audio;
 globalAudio.play();
@@ -248,7 +265,7 @@ const f=fonts[Math.random()*fonts.length|0];
 return `<span style="
 font-family:${f};
 display:inline-block;
-transform:rotate(${Math.random()*30-15}deg);
+transform:rotate(${Math.random()*10-5}deg);
 ">${c}</span>`;
 }).join("");
 }
