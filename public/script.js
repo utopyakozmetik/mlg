@@ -1,12 +1,22 @@
-
 let posts=[];
 let current=0;
 
 const audio=document.getElementById("globalAudio");
 
+/* 🔊 BUTTON SOUND */
+const clickSound=new Audio("public/assets/sounds/click.mp3");
+
+function playClick(){
+clickSound.currentTime=0;
+clickSound.play().catch(()=>{});
+}
+
 /* INTRO */
 document.querySelectorAll(".lang").forEach(l=>{
-l.onclick=init;
+l.onclick=()=>{
+playClick();
+init();
+};
 });
 
 async function init(){
@@ -34,53 +44,88 @@ const el=document.createElement("div");
 el.className="post";
 
 if(p.images){
-el.appendChild(slider(p.images,false));
+el.appendChild(slider(p.images));
 }
 
-el.onclick=()=>openPost(i);
+el.onclick=()=>{
+playClick();
+openPost(i);
+};
 
 t.appendChild(el);
 });
 }
 
-/* SLIDER (SAFE) */
-function slider(arr,modal){
+/* 🔥 SLIDER (VIDEO + IMAGE DESTEKLİ FINAL) */
+function slider(arr){
 
 const wrap=document.createElement("div");
 wrap.className="slider";
 
 let i=0;
 
-const slides=arr.map(s=>{
-const img=document.createElement("img");
-img.src=s;
-img.className="slide";
-wrap.appendChild(img);
-return img;
+const slides=arr.map(src=>{
+
+let el;
+
+/* VIDEO / IMAGE AYRIMI */
+if(src.endsWith(".mp4")){
+el=document.createElement("video");
+el.src=src;
+el.loop=true;
+el.muted=true;
+el.playsInline=true;
+el.preload="metadata";
+}else{
+el=document.createElement("img");
+el.src=src;
+}
+
+el.className="slide";
+wrap.appendChild(el);
+
+return el;
 });
 
 function show(){
-slides.forEach(x=>x.classList.remove("active"));
-slides[i].classList.add("active");
+
+slides.forEach(s=>{
+s.classList.remove("active");
+
+/* video pause */
+if(s.tagName==="VIDEO"){
+s.pause();
+}
+});
+
+const active=slides[i];
+active.classList.add("active");
+
+/* video autoplay sadece aktif slide */
+if(active.tagName==="VIDEO"){
+active.play().catch(()=>{});
+}
 }
 
-const prev=document.createElement("button");
-const next=document.createElement("button");
+const prev=document.createElement("div");
+const next=document.createElement("div");
 
 prev.className="nav-btn prev";
 next.className="nav-btn next";
 
-prev.innerText="←";
-next.innerText="→";
+prev.innerHTML=`<img src="public/assets/images/onceki.png">`;
+next.innerHTML=`<img src="public/assets/images/sonraki.png">`;
 
 prev.onclick=e=>{
 e.stopPropagation();
+playClick();
 i=(i-1+slides.length)%slides.length;
 show();
 };
 
 next.onclick=e=>{
 e.stopPropagation();
+playClick();
 i=(i+1)%slides.length;
 show();
 };
@@ -92,7 +137,7 @@ show();
 return wrap;
 }
 
-/* MODAL OPEN */
+/* MODAL */
 function openPost(i){
 
 current=i;
@@ -106,7 +151,7 @@ m.innerHTML="";
 s.innerHTML="";
 
 if(p.images){
-m.appendChild(slider(p.images,true));
+m.appendChild(slider(p.images));
 }
 
 if(p.audio){
@@ -115,14 +160,14 @@ audio.play().catch(()=>{});
 }
 
 s.innerHTML=`
-<h2>${p.title||""}</h2>
-<p>${p.description||""}</p>
+<h2>${ransomText(p.title||"")}</h2>
+<p>${ransomText(p.description||"")}</p>
 `;
 
 document.getElementById("modal").classList.remove("hidden");
 }
 
-/* ARCHIVE FIX */
+/* ARCHIVE */
 function archive(){
 
 const a=document.getElementById("left-archive");
@@ -130,16 +175,18 @@ a.innerHTML="";
 
 const h=document.createElement("div");
 h.innerText="Nisan '26";
-h.style.opacity="0.6";
-h.style.marginBottom="10px";
 a.appendChild(h);
 
 posts.forEach((p,i)=>{
-
 const el=document.createElement("div");
 el.innerText=p.title;
-el.onclick=()=>document.querySelectorAll(".post")[i]
+
+el.onclick=()=>{
+playClick();
+document.querySelectorAll(".post")[i]
 .scrollIntoView({behavior:"smooth"});
+};
+
 a.appendChild(el);
 });
 }
@@ -148,16 +195,19 @@ a.appendChild(el);
 function setupModal(){
 
 document.getElementById("closeModal").onclick=()=>{
+playClick();
 document.getElementById("modal").classList.add("hidden");
 audio.pause();
 };
 
 document.getElementById("prevPost").onclick=()=>{
+playClick();
 current=(current-1+posts.length)%posts.length;
 openPost(current);
 };
 
 document.getElementById("nextPost").onclick=()=>{
+playClick();
 current=(current+1)%posts.length;
 openPost(current);
 };
@@ -187,24 +237,21 @@ function load(){
 audio.src=tracks[i].src;
 name.innerText=tracks[i].name;
 audio.play().catch(()=>{});
-btn.innerText="⏸";
 }
 
 btn.onclick=()=>{
-if(audio.paused){
-audio.play();
-btn.innerText="⏸";
-}else{
-audio.pause();
-btn.innerText="▶";
-}
+playClick();
+if(audio.paused) audio.play();
+else audio.pause();
 };
 
 document.getElementById("prevTrack").onclick=()=>{
+playClick();
 i--; if(i<0)i=tracks.length-1; load();
 };
 
 document.getElementById("nextTrack").onclick=()=>{
+playClick();
 i++; if(i>=tracks.length)i=0; load();
 };
 
@@ -215,4 +262,28 @@ bar.style.width=(audio.currentTime/audio.duration)*100+"%";
 };
 
 load();
+}
+
+/* RANSOM */
+function ransomText(t){
+
+const fonts=[
+"Special Elite",
+"Courier Prime",
+"IM Fell English",
+"Georgia",
+"Arial Black"
+];
+
+return [...t].map(c=>{
+if(c===" ") return " ";
+
+const f=fonts[Math.random()*fonts.length|0];
+
+return `<span style="
+font-family:${f};
+display:inline-block;
+transform:rotate(${Math.random()*20-10}deg);
+">${c}</span>`;
+}).join("");
 }
