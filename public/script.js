@@ -1,5 +1,7 @@
+
 let posts=[];
 let current=0;
+
 const audio=document.getElementById("globalAudio");
 
 /* INTRO */
@@ -17,10 +19,12 @@ posts.sort((a,b)=>new Date(b.date)-new Date(a.date));
 render();
 archive();
 player();
+setupModal();
 }
 
 /* FEED */
 function render(){
+
 const t=document.getElementById("timeline");
 t.innerHTML="";
 
@@ -39,7 +43,7 @@ t.appendChild(el);
 });
 }
 
-/* SLIDER */
+/* SLIDER (SAFE) */
 function slider(arr,modal){
 
 const wrap=document.createElement("div");
@@ -88,7 +92,7 @@ show();
 return wrap;
 }
 
-/* OPEN MODAL */
+/* MODAL OPEN */
 function openPost(i){
 
 current=i;
@@ -107,7 +111,7 @@ m.appendChild(slider(p.images,true));
 
 if(p.audio){
 audio.src=p.audio;
-audio.play();
+audio.play().catch(()=>{});
 }
 
 s.innerHTML=`
@@ -118,23 +122,45 @@ s.innerHTML=`
 document.getElementById("modal").classList.remove("hidden");
 }
 
-/* ARCHIVE */
+/* ARCHIVE FIX */
 function archive(){
 
 const a=document.getElementById("left-archive");
 a.innerHTML="";
 
 const h=document.createElement("div");
-h.className="archive-title";
 h.innerText="Nisan '26";
+h.style.opacity="0.6";
+h.style.marginBottom="10px";
 a.appendChild(h);
 
 posts.forEach((p,i)=>{
+
 const el=document.createElement("div");
 el.innerText=p.title;
-el.onclick=()=>document.querySelectorAll(".post")[i].scrollIntoView({behavior:"smooth"});
+el.onclick=()=>document.querySelectorAll(".post")[i]
+.scrollIntoView({behavior:"smooth"});
 a.appendChild(el);
 });
+}
+
+/* MODAL CONTROLS */
+function setupModal(){
+
+document.getElementById("closeModal").onclick=()=>{
+document.getElementById("modal").classList.add("hidden");
+audio.pause();
+};
+
+document.getElementById("prevPost").onclick=()=>{
+current=(current-1+posts.length)%posts.length;
+openPost(current);
+};
+
+document.getElementById("nextPost").onclick=()=>{
+current=(current+1)%posts.length;
+openPost(current);
+};
 }
 
 /* PLAYER */
@@ -165,8 +191,13 @@ btn.innerText="⏸";
 }
 
 btn.onclick=()=>{
-if(audio.paused) audio.play();
-else audio.pause();
+if(audio.paused){
+audio.play();
+btn.innerText="⏸";
+}else{
+audio.pause();
+btn.innerText="▶";
+}
 };
 
 document.getElementById("prevTrack").onclick=()=>{
