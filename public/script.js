@@ -4,7 +4,7 @@ let current=0;
 const audio=document.getElementById("globalAudio");
 
 /* 🔊 BUTTON SOUND */
-const clickSound=new Audio("public/assets/sounds/click.mp3");
+const clickSound=new Audio("assets/sounds/click.mp3");
 
 function playClick(){
 clickSound.currentTime=0;
@@ -56,7 +56,7 @@ t.appendChild(el);
 });
 }
 
-/* 🔥 SLIDER (VIDEO + IMAGE DESTEKLİ FINAL) */
+/* 🔥 SLIDER (TÜM PATH FIXED) */
 function slider(arr){
 
 const wrap=document.createElement("div");
@@ -68,14 +68,12 @@ const slides=arr.map(src=>{
 
 let el;
 
-/* VIDEO / IMAGE AYRIMI */
 if(src.endsWith(".mp4")){
 el=document.createElement("video");
 el.src=src;
 el.loop=true;
 el.muted=true;
 el.playsInline=true;
-el.preload="metadata";
 }else{
 el=document.createElement("img");
 el.src=src;
@@ -91,30 +89,26 @@ function show(){
 
 slides.forEach(s=>{
 s.classList.remove("active");
-
-/* video pause */
-if(s.tagName==="VIDEO"){
-s.pause();
-}
+if(s.tagName==="VIDEO") s.pause();
 });
 
 const active=slides[i];
 active.classList.add("active");
 
-/* video autoplay sadece aktif slide */
 if(active.tagName==="VIDEO"){
 active.play().catch(()=>{});
 }
 }
 
+/* ⬇️ BURASI KRİTİK (ARTIK DOĞRU PATH) */
 const prev=document.createElement("div");
 const next=document.createElement("div");
 
 prev.className="nav-btn prev";
 next.className="nav-btn next";
 
-prev.innerHTML=`<img src="public/assets/images/onceki.png">`;
-next.innerHTML=`<img src="public/assets/images/sonraki.png">`;
+prev.innerHTML=`<img src="assets/images/onceki.png">`;
+next.innerHTML=`<img src="assets/images/sonraki.png">`;
 
 prev.onclick=e=>{
 e.stopPropagation();
