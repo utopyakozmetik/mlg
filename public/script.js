@@ -48,7 +48,7 @@ const el=document.createElement("div");
 el.className="post";
 
 if(p.images){
-el.appendChild(slider(p.images));
+el.appendChild(slider(p.images,false)); // feed
 }
 
 el.onclick=()=>{
@@ -61,16 +61,15 @@ t.appendChild(el);
 }
 
 /* =========================
-   🔥 SLIDER ENGINE (STABLE)
+   🔥 SLIDER (ISOLATED FIXED)
 ========================= */
-function slider(arr){
+function slider(arr,isModal=false){
 
 const wrap=document.createElement("div");
 wrap.className="slider";
 
 let i=0;
 
-/* slides */
 const slides=arr.map(src=>{
 
 let el;
@@ -83,20 +82,17 @@ el.src=src;
 el.loop=true;
 el.muted=true;
 el.playsInline=true;
-el.preload="metadata";
 }else{
 el=document.createElement("img");
 el.src=src;
 }
 
 el.className="slide";
-el.style.willChange="opacity";
-
 wrap.appendChild(el);
+
 return el;
 });
 
-/* show logic */
 function show(){
 
 slides.forEach(s=>{
@@ -116,7 +112,7 @@ active.play().catch(()=>{});
 }
 }
 
-/* navigation */
+/* NAV */
 const prev=document.createElement("div");
 const next=document.createElement("div");
 
@@ -126,9 +122,7 @@ next.className="nav-btn next";
 prev.innerHTML=`<img src="assets/images/onceki.png">`;
 next.innerHTML=`<img src="assets/images/sonraki.png">`;
 
-/* isolated events */
 prev.addEventListener("click",(e)=>{
-e.preventDefault();
 e.stopPropagation();
 playClick();
 i=(i-1+slides.length)%slides.length;
@@ -136,17 +130,25 @@ show();
 });
 
 next.addEventListener("click",(e)=>{
-e.preventDefault();
 e.stopPropagation();
 playClick();
 i=(i+1)%slides.length;
 show();
 });
 
+/* 🔥 ISOLATION RULE */
 wrap.appendChild(prev);
 wrap.appendChild(next);
 
 show();
+
+/* cleanup hook (future-proof) */
+wrap._destroy=()=>{
+slides.forEach(s=>{
+if(s.tagName==="VIDEO") s.pause();
+});
+};
+
 return wrap;
 }
 
@@ -171,7 +173,7 @@ audio.currentTime=0;
 
 /* media */
 if(p.images){
-m.appendChild(slider(p.images));
+m.appendChild(slider(p.images,true)); // modal
 }
 
 if(p.audio){
@@ -239,7 +241,7 @@ openPost(current);
 }
 
 /* =========================
-   PLAYER (HOME MUSIC)
+   PLAYER
 ========================= */
 function player(){
 
@@ -294,7 +296,7 @@ load();
 }
 
 /* =========================
-   RANSOM TEXT
+   RANSOM
 ========================= */
 function ransomText(t){
 
