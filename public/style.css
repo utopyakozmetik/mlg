@@ -3,6 +3,7 @@ margin:0;
 background:black;
 color:white;
 font-family:sans-serif;
+overflow:hidden;
 }
 
 #bg{
@@ -25,6 +26,12 @@ align-items:center;
 z-index:999;
 }
 
+.intro-title{
+font-family:"IM Fell English";
+font-size:32px;
+margin-bottom:20px;
+}
+
 .lang-grid{display:flex;gap:20px}
 .lang img{width:120px;cursor:pointer}
 
@@ -43,8 +50,8 @@ padding:20px;
 
 /* POST */
 .post{
-min-height:300px;
-margin-bottom:20px;
+min-height:320px;
+margin-bottom:30px;
 cursor:pointer;
 }
 
@@ -78,6 +85,7 @@ border:1px solid white;
 color:white;
 padding:8px;
 cursor:pointer;
+z-index:5;
 }
 
 .prev{left:10px}
@@ -93,15 +101,29 @@ right:20px;
 .modal{
 position:fixed;
 inset:0;
-background:rgba(0,0,0,0.95);
+background:black;
 }
 
 .hidden{display:none}
 
 .modal-grid{
 display:grid;
-grid-template-columns:65% 35%;
+grid-template-columns:70% 30%;
 height:100%;
+}
+
+#modal-media{
+display:flex;
+justify-content:center;
+align-items:center;
+overflow:hidden;
+}
+
+#modal-media img,
+#modal-media video{
+max-width:100%;
+max-height:100%;
+object-fit:contain;
 }
 
 /* PLAYER */
@@ -138,11 +160,6 @@ background:white;
 }
 
 /* RANSOM */
-#ransom-root{
-height:150px;
-overflow:hidden;
-}
-
 .ransom-char{
 position:absolute;
 }

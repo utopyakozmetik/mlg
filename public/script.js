@@ -15,7 +15,7 @@ try{
 const res = await fetch("posts.json");
 posts = await res.json();
 }catch(e){
-console.error("JSON ERROR:", e);
+console.error(e);
 }
 
 posts.sort((a,b)=>new Date(b.date)-new Date(a.date));
@@ -34,6 +34,12 @@ t.innerHTML="";
 posts.forEach((p,i)=>{
 const el=document.createElement("div");
 el.className="post";
+
+if(p.title){
+const title=document.createElement("div");
+title.innerHTML=ransomText(p.title);
+el.appendChild(title);
+}
 
 if(p.images){
 el.appendChild(createSlider(p.images));
@@ -54,14 +60,18 @@ wrap.className="slider";
 let i=0;
 
 const slides=media.map(src=>{
-const el=document.createElement(src.endsWith(".mp4")?"video":"img");
-el.src=src; // PATH FIXED (relative)
+const isVideo = src.endsWith(".mp4");
+const el=document.createElement(isVideo?"video":"img");
+
+el.src=src;
 el.className="slide";
 
-if(el.tagName==="VIDEO"){
-el.autoplay=true;
+if(isVideo){
 el.loop=true;
-el.controls=true;
+el.muted=true;
+
+el.addEventListener("mouseenter",()=>el.play());
+el.addEventListener("mouseleave",()=>el.pause());
 }
 
 wrap.appendChild(el);
@@ -105,18 +115,28 @@ const s=document.getElementById("modal-side");
 m.innerHTML="";
 s.innerHTML="";
 
+/* MEDIA FULLSCREEN FIX */
 if(p.images){
-m.appendChild(createSlider(p.images));
+p.images.forEach(src=>{
+const el=document.createElement(src.endsWith(".mp4")?"video":"img");
+el.src=src;
+
+if(el.tagName==="VIDEO"){
+el.controls=true;
 }
 
+m.appendChild(el);
+});
+}
+
+/* POST AUDIO AUTOPLAY */
 if(p.audio){
-const a=document.createElement("audio");
-a.src=p.audio;
-a.controls=true;
-m.appendChild(a);
+globalAudio.src=p.audio;
+globalAudio.play();
 }
 
-s.innerHTML=`<h2>${p.title}</h2><p>${p.description}</p>`;
+s.innerHTML=`<h2>${ransomText(p.title||"")}</h2>
+<p>${ransomText(p.description||"")}</p>`;
 
 document.getElementById("modal").classList.remove("hidden");
 }
@@ -125,6 +145,7 @@ function setupModal(){
 
 document.getElementById("closeModal").onclick=()=>{
 document.getElementById("modal").classList.add("hidden");
+globalAudio.pause();
 };
 
 document.getElementById("prevPost").onclick=()=>{
@@ -151,7 +172,7 @@ a.appendChild(el);
 });
 }
 
-/* PLAYER (FIXED & SMOOTH) */
+/* PLAYER */
 function setupPlayer(){
 
 const tracks=[
@@ -206,4 +227,28 @@ globalAudio.currentTime=ratio*globalAudio.duration;
 };
 
 load();
+}
+
+/* RANSOM */
+function ransomText(t){
+
+const fonts=[
+"Special Elite",
+"Courier Prime",
+"IM Fell English",
+"Georgia",
+"Arial Black"
+];
+
+return [...t].map(c=>{
+if(c===" ") return " ";
+
+const f=fonts[Math.random()*fonts.length|0];
+
+return `<span style="
+font-family:${f};
+display:inline-block;
+transform:rotate(${Math.random()*30-15}deg);
+">${c}</span>`;
+}).join("");
 }
