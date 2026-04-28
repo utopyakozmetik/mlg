@@ -1,27 +1,31 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Multilayergod</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Multilayergod</title>
 
-  <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<!-- 🌐 INTRO -->
+<!-- INTRO -->
 <div id="intro">
   <div class="intro-title">Language Selection</div>
 
   <div class="lang-grid">
-    <div class="lang"><img src="/assets/images/lang/tr.png"></div>
-    <div class="lang"><img src="/assets/images/lang/en.png"></div>
-    <div class="lang"><img src="/assets/images/lang/fr.png"></div>
+    <div class="lang"><img src="assets/images/lang/tr.png"></div>
+    <div class="lang"><img src="assets/images/lang/en.png"></div>
+    <div class="lang"><img src="assets/images/lang/fr.png"></div>
   </div>
 </div>
 
+<!-- BACKGROUND -->
 <div id="bg"></div>
+
+<!-- 🔥 RANSOM PHYSICS LAYER -->
+<div id="ransom-root"></div>
 
 <div class="container">
 
@@ -32,19 +36,14 @@
   <aside class="sidebar">
 
     <div id="sidebar-title">
-      <img src="/assets/images/ff/falanfilan.png">
+      <img src="assets/images/ff/falanfilan.png">
     </div>
 
-    <!-- 🎧 PLAYER -->
-    <div id="music-player">
-      <audio id="audio" controls>
-        <source src="/assets/music/sample.mp3">
-      </audio>
+    <audio id="globalAudio" controls></audio>
 
-      <div class="controls">
-        <button id="prevTrack">⏮</button>
-        <button id="nextTrack">⏭</button>
-      </div>
+    <div class="controls">
+      <button id="prevTrack">⏮</button>
+      <button id="nextTrack">⏭</button>
     </div>
 
   </aside>
@@ -53,18 +52,16 @@
 
 <!-- MODAL -->
 <div id="modal" class="modal hidden">
-  <div class="modal-content">
 
-    <button id="closeModal">✕</button>
-    <button id="prevPost">←</button>
-    <button id="nextPost">→</button>
+  <button id="prevPost" class="nav left">‹</button>
+  <button id="nextPost" class="nav right">›</button>
+  <button id="closeModal" class="exit">Çıkış</button>
 
-    <div class="modal-grid">
-      <div id="modal-media"></div>
-      <div id="modal-side"></div>
-    </div>
-
+  <div class="modal-grid">
+    <div id="modal-media"></div>
+    <div id="modal-side"></div>
   </div>
+
 </div>
 
 <script src="script.js"></script>
