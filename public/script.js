@@ -3,7 +3,7 @@ let current=0;
 
 const audio=document.getElementById("globalAudio");
 
-/* 🔊 BUTTON SOUND */
+/* 🔊 CLICK SOUND */
 const clickSound=new Audio("assets/sounds/click.mp3");
 
 function playClick(){
@@ -11,7 +11,9 @@ clickSound.currentTime=0;
 clickSound.play().catch(()=>{});
 }
 
-/* INTRO */
+/* =========================
+   INIT
+========================= */
 document.querySelectorAll(".lang").forEach(l=>{
 l.onclick=()=>{
 playClick();
@@ -32,7 +34,9 @@ player();
 setupModal();
 }
 
-/* FEED */
+/* =========================
+   FEED
+========================= */
 function render(){
 
 const t=document.getElementById("timeline");
@@ -56,7 +60,9 @@ t.appendChild(el);
 });
 }
 
-/* 🔥 SLIDER (TÜM PATH FIXED) */
+/* =========================
+   🔥 SLIDER ENGINE (STABLE)
+========================= */
 function slider(arr){
 
 const wrap=document.createElement("div");
@@ -64,32 +70,42 @@ wrap.className="slider";
 
 let i=0;
 
+/* slides */
 const slides=arr.map(src=>{
 
 let el;
 
-if(src.endsWith(".mp4")){
+const clean=src.split("?")[0].toLowerCase();
+
+if(clean.endsWith(".mp4")){
 el=document.createElement("video");
 el.src=src;
 el.loop=true;
 el.muted=true;
 el.playsInline=true;
+el.preload="metadata";
 }else{
 el=document.createElement("img");
 el.src=src;
 }
 
 el.className="slide";
-wrap.appendChild(el);
+el.style.willChange="opacity";
 
+wrap.appendChild(el);
 return el;
 });
 
+/* show logic */
 function show(){
 
 slides.forEach(s=>{
 s.classList.remove("active");
-if(s.tagName==="VIDEO") s.pause();
+
+if(s.tagName==="VIDEO"){
+s.pause();
+s.currentTime=0;
+}
 });
 
 const active=slides[i];
@@ -100,7 +116,7 @@ active.play().catch(()=>{});
 }
 }
 
-/* ⬇️ BURASI KRİTİK (ARTIK DOĞRU PATH) */
+/* navigation */
 const prev=document.createElement("div");
 const next=document.createElement("div");
 
@@ -110,19 +126,22 @@ next.className="nav-btn next";
 prev.innerHTML=`<img src="assets/images/onceki.png">`;
 next.innerHTML=`<img src="assets/images/sonraki.png">`;
 
-prev.onclick=e=>{
+/* isolated events */
+prev.addEventListener("click",(e)=>{
+e.preventDefault();
 e.stopPropagation();
 playClick();
 i=(i-1+slides.length)%slides.length;
 show();
-};
+});
 
-next.onclick=e=>{
+next.addEventListener("click",(e)=>{
+e.preventDefault();
 e.stopPropagation();
 playClick();
 i=(i+1)%slides.length;
 show();
-};
+});
 
 wrap.appendChild(prev);
 wrap.appendChild(next);
@@ -131,7 +150,9 @@ show();
 return wrap;
 }
 
-/* MODAL */
+/* =========================
+   MODAL
+========================= */
 function openPost(i){
 
 current=i;
@@ -144,6 +165,11 @@ const s=document.getElementById("modal-side");
 m.innerHTML="";
 s.innerHTML="";
 
+/* stop home audio */
+audio.pause();
+audio.currentTime=0;
+
+/* media */
 if(p.images){
 m.appendChild(slider(p.images));
 }
@@ -153,6 +179,7 @@ audio.src=p.audio;
 audio.play().catch(()=>{});
 }
 
+/* text */
 s.innerHTML=`
 <h2>${ransomText(p.title||"")}</h2>
 <p>${ransomText(p.description||"")}</p>
@@ -161,7 +188,9 @@ s.innerHTML=`
 document.getElementById("modal").classList.remove("hidden");
 }
 
-/* ARCHIVE */
+/* =========================
+   ARCHIVE
+========================= */
 function archive(){
 
 const a=document.getElementById("left-archive");
@@ -185,7 +214,9 @@ a.appendChild(el);
 });
 }
 
-/* MODAL CONTROLS */
+/* =========================
+   MODAL CONTROLS
+========================= */
 function setupModal(){
 
 document.getElementById("closeModal").onclick=()=>{
@@ -207,7 +238,9 @@ openPost(current);
 };
 }
 
-/* PLAYER */
+/* =========================
+   PLAYER (HOME MUSIC)
+========================= */
 function player(){
 
 const tracks=[
@@ -241,12 +274,14 @@ else audio.pause();
 
 document.getElementById("prevTrack").onclick=()=>{
 playClick();
-i--; if(i<0)i=tracks.length-1; load();
+i--; if(i<0)i=tracks.length-1;
+load();
 };
 
 document.getElementById("nextTrack").onclick=()=>{
 playClick();
-i++; if(i>=tracks.length)i=0; load();
+i++; if(i>=tracks.length)i=0;
+load();
 };
 
 audio.ontimeupdate=()=>{
@@ -258,7 +293,9 @@ bar.style.width=(audio.currentTime/audio.duration)*100+"%";
 load();
 }
 
-/* RANSOM */
+/* =========================
+   RANSOM TEXT
+========================= */
 function ransomText(t){
 
 const fonts=[
