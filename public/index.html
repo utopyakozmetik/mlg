@@ -6,6 +6,9 @@
 <title>Multilayergod</title>
 
 <link rel="stylesheet" href="style.css">
+
+<!-- fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime&family=IM+Fell+English&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -13,7 +16,6 @@
 <!-- INTRO -->
 <div id="intro">
   <div class="intro-title">Language Selection</div>
-
   <div class="lang-grid">
     <div class="lang"><img src="assets/images/lang/tr.png"></div>
     <div class="lang"><img src="assets/images/lang/en.png"></div>
@@ -21,29 +23,37 @@
   </div>
 </div>
 
-<!-- BACKGROUND -->
+<!-- BG -->
 <div id="bg"></div>
 
-<!-- 🔥 RANSOM PHYSICS LAYER -->
+<!-- RANSOM PHYSICS -->
 <div id="ransom-root"></div>
 
 <div class="container">
 
+  <!-- ARCHIVE -->
   <div id="left-archive"></div>
 
+  <!-- FEED -->
   <main id="timeline"></main>
 
+  <!-- SIDEBAR -->
   <aside class="sidebar">
 
-    <div id="sidebar-title">
-      <img src="assets/images/ff/falanfilan.png">
-    </div>
+    <img src="assets/images/ff/falanfilan.png" style="max-width:200px">
 
+    <!-- GLOBAL AUDIO -->
     <audio id="globalAudio" controls></audio>
 
-    <div class="controls">
+    <div>
       <button id="prevTrack">⏮</button>
       <button id="nextTrack">⏭</button>
+    </div>
+
+    <!-- BANDCAMP -->
+    <div class="links">
+      <a href="https://sanr.bandcamp.com" target="_blank">Sanr Bandcamp</a>
+      <a href="https://flamingpines.bandcamp.com/album/mnk" target="_blank">FenGi Album</a>
     </div>
 
   </aside>
@@ -53,8 +63,8 @@
 <!-- MODAL -->
 <div id="modal" class="modal hidden">
 
-  <button id="prevPost" class="nav left">‹</button>
-  <button id="nextPost" class="nav right">›</button>
+  <button id="prevPost" class="nav-btn prev">← Previous</button>
+  <button id="nextPost" class="nav-btn next">Next →</button>
   <button id="closeModal" class="exit">Çıkış</button>
 
   <div class="modal-grid">

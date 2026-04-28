@@ -1,8 +1,9 @@
-body{
+body {
 margin:0;
 overflow:hidden;
-font-family:sans-serif;
+background:black;
 color:white;
+font-family:sans-serif;
 }
 
 #bg{
@@ -10,9 +11,10 @@ position:fixed;
 inset:0;
 background:url("assets/images/background/bg.png") center/cover;
 z-index:-10;
-filter:brightness(0.85);
+filter:brightness(0.8);
 }
 
+/* INTRO */
 #intro{
 position:fixed;
 inset:0;
@@ -24,15 +26,8 @@ align-items:center;
 z-index:999;
 }
 
-.lang-grid{
-display:flex;
-gap:20px;
-}
-
-.lang img{
-width:120px;
-cursor:pointer;
-}
+.lang-grid{display:flex;gap:20px}
+.lang img{width:120px;cursor:pointer}
 
 /* LAYOUT */
 .container{
@@ -44,6 +39,56 @@ height:100vh;
 #timeline{
 overflow-y:auto;
 height:100vh;
+}
+
+/* ARCHIVE */
+#left-archive{
+padding:20px;
+font-size:12px;
+opacity:.7;
+overflow-y:auto;
+}
+
+/* SLIDER */
+.slider{
+position:relative;
+width:100%;
+height:100%;
+overflow:hidden;
+}
+
+.slide{
+position:absolute;
+inset:0;
+width:100%;
+height:100%;
+object-fit:cover;
+opacity:0;
+transition:.6s;
+}
+
+.slide.active{opacity:1}
+
+/* NAV */
+.nav-btn{
+position:absolute;
+top:50%;
+transform:translateY(-50%);
+background:rgba(0,0,0,0.4);
+border:1px solid rgba(255,255,255,0.2);
+color:white;
+padding:10px;
+cursor:pointer;
+z-index:10;
+}
+
+.prev{left:20px}
+.next{right:20px}
+
+.exit{
+position:absolute;
+top:20px;
+right:20px;
 }
 
 /* MODAL */
@@ -61,31 +106,15 @@ grid-template-columns:65% 35%;
 height:100%;
 }
 
-/* NAV */
-.nav,.exit{
-position:absolute;
-background:rgba(255,255,255,0.1);
-border:none;
-color:white;
-cursor:pointer;
-}
-
-.left{left:20px;top:50%}
-.right{right:20px;top:50%}
-.exit{top:20px;right:20px}
-
-/* 🔥 RANSOM PHYSICS */
+/* RANSOM */
 #ransom-root{
 position:relative;
-width:100%;
-height:200px;
+height:180px;
 overflow:hidden;
 pointer-events:none;
 }
 
 .ransom-char{
 position:absolute;
-font-size:22px;
-font-weight:bold;
-will-change:transform;
+font-size:20px;
 }
