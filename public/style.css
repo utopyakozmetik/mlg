@@ -14,22 +14,42 @@ z-index:-10;
 filter:brightness(0.8);
 }
 
-/* INTRO */
+/* INTRO FIX */
 #intro{
 position:fixed;
 inset:0;
-background:black;
 display:flex;
 flex-direction:column;
 justify-content:center;
 align-items:center;
+background:black;
+gap:20px;
 z-index:999;
 }
 
 .intro-title{
 font-family:"IM Fell English";
-font-size:32px;
-margin-bottom:20px;
+font-size:28px;
+opacity:0.8;
+}
+
+.lang-grid{
+display:flex;
+flex-direction:row;
+gap:25px;
+}
+
+.lang img{
+width:70px;
+height:70px;
+object-fit:contain;
+cursor:pointer;
+transition:.2s;
+}
+
+.lang img:hover{
+transform:scale(1.1);
+opacity:0.7;
 }
 
 /* LAYOUT */
@@ -39,11 +59,10 @@ grid-template-columns:15% 55% 30%;
 height:100vh;
 }
 
-/* FEED */
 #timeline{
 overflow-y:auto;
 height:100vh;
-padding:60px 20px 20px 20px;
+padding:60px 20px 20px;
 }
 
 .post{
@@ -52,36 +71,16 @@ margin-bottom:30px;
 cursor:pointer;
 }
 
-/* 🔥 INDEX (SOL) */
+/* INDEX */
 #left-archive{
 padding:60px 10px 10px 25px;
-font-weight:700;
-font-size:14px;
-letter-spacing:1.2px;
-opacity:0.95;
-overflow-y:auto;
-}
-
-.archive-group{
-margin-bottom:18px;
-}
-
-.archive-title{
-font-family:"IM Fell English";
 font-size:13px;
-opacity:0.5;
-margin-bottom:6px;
+opacity:0.9;
 }
 
 .archive-item{
 cursor:pointer;
 margin-bottom:4px;
-transition:.2s;
-font-size:13px;
-}
-
-.archive-item:hover{
-opacity:0.5;
 }
 
 /* SLIDER */
@@ -90,7 +89,6 @@ position:relative;
 width:100%;
 height:300px;
 overflow:hidden;
-touch-action:pan-y;
 }
 
 .slide{
@@ -101,11 +99,29 @@ height:100%;
 object-fit:cover;
 opacity:0;
 transition:.4s;
-pointer-events:none;
 }
 
 .slide.active{
 opacity:1;
+}
+
+/* MODAL */
+.modal{
+position:fixed;
+inset:0;
+background:black;
+}
+
+.hidden{display:none}
+
+.modal-grid{
+display:grid;
+grid-template-columns:70% 30%;
+height:100%;
+}
+
+#modal-media .slide{
+object-fit:contain;
 }
 
 /* NAV */
@@ -123,27 +139,6 @@ cursor:pointer;
 .prev{left:10px}
 .next{right:10px}
 
-/* MODAL */
-.modal{
-position:fixed;
-inset:0;
-background:black;
-}
-
-.hidden{display:none}
-
-.modal-grid{
-display:grid;
-grid-template-columns:70% 30%;
-height:100%;
-}
-
-#modal-media{
-display:flex;
-justify-content:center;
-align-items:center;
-}
-
 /* EXIT */
 .exit{
 position:absolute;
@@ -156,27 +151,21 @@ cursor:pointer;
 }
 
 /* PLAYER */
-.player{
-margin-top:20px;
-font-family:"Special Elite";
-}
+.player{margin-top:20px}
 
 .controls{
 display:flex;
 gap:10px;
-margin:10px 0;
 }
 
 .controls button{
 background:black;
 border:1px solid white;
 color:white;
-padding:8px;
-cursor:pointer;
+padding:6px;
 }
 
 .progress{
-width:100%;
 height:4px;
 background:#333;
 cursor:pointer;
@@ -189,9 +178,9 @@ background:white;
 }
 
 .track-name{
-margin-top:5px;
 font-size:12px;
 opacity:0.8;
+margin-bottom:5px;
 }
 
 /* LINKS */
@@ -200,20 +189,6 @@ margin-top:30px;
 }
 
 .links-title{
-font-family:"IM Fell English";
-font-size:15px;
 margin-bottom:10px;
 opacity:0.7;
-}
-
-.links a{
-display:block;
-margin-bottom:6px;
-color:white;
-text-decoration:none;
-opacity:0.9;
-}
-
-.links a:hover{
-opacity:0.5;
 }
