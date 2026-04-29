@@ -1,24 +1,12 @@
+const CLOUD_NAME="YOUR_CLOUD_NAME";
+
 let posts=[];
 let current=0;
 
 const audio=document.getElementById("globalAudio");
 
-/* 🔊 CLICK SOUND */
-const clickSound=new Audio("assets/sounds/click.mp3");
-
-function playClick(){
-clickSound.currentTime=0;
-clickSound.play().catch(()=>{});
-}
-
-/* =========================
-   INIT
-========================= */
 document.querySelectorAll(".lang").forEach(l=>{
-l.onclick=()=>{
-playClick();
-init();
-};
+l.onclick=()=>init();
 });
 
 async function init(){
@@ -32,87 +20,76 @@ render();
 archive();
 player();
 setupModal();
+
+audio.play().catch(()=>{});
 }
 
-/* =========================
-   FEED
-========================= */
+/* FEED */
 function render(){
-
 const t=document.getElementById("timeline");
 t.innerHTML="";
 
 posts.forEach((p,i)=>{
-
 const el=document.createElement("div");
 el.className="post";
 
 if(p.images){
-el.appendChild(slider(p.images,false)); // feed
+el.appendChild(slider(p.images,false));
 }
 
-el.onclick=()=>{
-playClick();
-openPost(i);
-};
+el.onclick=()=>openPost(i);
 
 t.appendChild(el);
 });
 }
 
-/* =========================
-   🔥 SLIDER (ISOLATED FIXED)
-========================= */
-function slider(arr,isModal=false){
+/* SLIDER */
+function slider(arr,isModal){
 
 const wrap=document.createElement("div");
 wrap.className="slider";
 
+if(!isModal) wrap.classList.add("feed-slider");
+
 let i=0;
 
-const slides=arr.map(src=>{
+const slides=arr.map(item=>{
 
 let el;
 
-const clean=src.split("?")[0].toLowerCase();
-
-if(clean.endsWith(".mp4")){
+if(typeof item==="string"){
+el=document.createElement("img");
+el.src=item;
+}else{
 el=document.createElement("video");
-el.src=src;
+el.src=`https://res.cloudinary.com/${CLOUD_NAME}/video/upload/q_auto,f_auto/${item.src}.mp4`;
+el.poster=`https://res.cloudinary.com/${CLOUD_NAME}/video/upload/${item.src}.jpg`;
 el.loop=true;
 el.muted=true;
 el.playsInline=true;
-}else{
-el=document.createElement("img");
-el.src=src;
 }
 
 el.className="slide";
 wrap.appendChild(el);
-
 return el;
 });
 
 function show(){
-
 slides.forEach(s=>{
 s.classList.remove("active");
-
 if(s.tagName==="VIDEO"){
 s.pause();
 s.currentTime=0;
 }
 });
 
-const active=slides[i];
-active.classList.add("active");
+slides[i].classList.add("active");
 
-if(active.tagName==="VIDEO"){
-active.play().catch(()=>{});
+if(slides[i].tagName==="VIDEO"){
+slides[i].play().catch(()=>{});
 }
 }
 
-/* NAV */
 const prev=document.createElement("div");
 const next=document.createElement("div");
 
@@ -122,39 +99,17 @@ next.className="nav-btn next";
 prev.innerHTML=`<img src="assets/images/onceki.png">`;
 next.innerHTML=`<img src="assets/images/sonraki.png">`;
 
-prev.addEventListener("click",(e)=>{
-e.stopPropagation();
-playClick();
-i=(i-1+slides.length)%slides.length;
-show();
-});
+prev.onclick=(e)=>{e.stopPropagation();i=(i-1+slides.length)%slides.length;show();};
+next.onclick=(e)=>{e.stopPropagation();i=(i+1)%slides.length;show();};
 
-next.addEventListener("click",(e)=>{
-e.stopPropagation();
-playClick();
-i=(i+1)%slides.length;
-show();
-});
-
-/* 🔥 ISOLATION RULE */
 wrap.appendChild(prev);
 wrap.appendChild(next);
 
 show();
-
-/* cleanup hook (future-proof) */
-wrap._destroy=()=>{
-slides.forEach(s=>{
-if(s.tagName==="VIDEO") s.pause();
-});
-};
-
 return wrap;
 }
 
-/* =========================
-   MODAL
-========================= */
+/* MODAL */
 function openPost(i){
 
 current=i;
@@ -167,13 +122,10 @@ const s=document.getElementById("modal-side");
 m.innerHTML="";
 s.innerHTML="";
 
-/* stop home audio */
 audio.pause();
-audio.currentTime=0;
 
-/* media */
 if(p.images){
-m.appendChild(slider(p.images,true)); // modal
+m.appendChild(slider(p.images,true));
 }
 
 if(p.audio){
@@ -181,79 +133,55 @@ audio.src=p.audio;
 audio.play().catch(()=>{});
 }
 
-/* text */
-s.innerHTML=`
-<h2>${ransomText(p.title||"")}</h2>
-<p>${ransomText(p.description||"")}</p>
-`;
+s.innerHTML=`<h2>${ransomText(p.title)}</h2><p>${ransomText(p.description)}</p>`;
 
 document.getElementById("modal").classList.remove("hidden");
 }
 
-/* =========================
-   ARCHIVE
-========================= */
+/* ARCHIVE */
 function archive(){
 
 const a=document.getElementById("left-archive");
 a.innerHTML="";
 
-const h=document.createElement("div");
-h.innerText="Nisan '26";
-a.appendChild(h);
+const img=document.createElement("img");
+img.src="assets/images/nisan.png";
+img.style.width="120px";
+a.appendChild(img);
 
 posts.forEach((p,i)=>{
 const el=document.createElement("div");
-el.innerText=p.title;
-
-el.onclick=()=>{
-playClick();
-document.querySelectorAll(".post")[i]
-.scrollIntoView({behavior:"smooth"});
-};
-
+el.innerHTML=ransomText(p.title);
+el.onclick=()=>document.querySelectorAll(".post")[i].scrollIntoView({behavior:"smooth"});
 a.appendChild(el);
 });
 }
 
-/* =========================
-   MODAL CONTROLS
-========================= */
+/* MODAL CONTROLS */
 function setupModal(){
 
 document.getElementById("closeModal").onclick=()=>{
-playClick();
 document.getElementById("modal").classList.add("hidden");
 audio.pause();
 };
 
 document.getElementById("prevPost").onclick=()=>{
-playClick();
 current=(current-1+posts.length)%posts.length;
 openPost(current);
 };
 
 document.getElementById("nextPost").onclick=()=>{
-playClick();
 current=(current+1)%posts.length;
 openPost(current);
 };
 }
 
-/* =========================
-   PLAYER
-========================= */
+/* PLAYER */
 function player(){
 
 const tracks=[
-{
-src:"assets/music/acrimony - burning lives.mp3",
-name:"Acrimony - Burning Lives"
-},
-{
-src:"assets/music/res facta - catastroph.mp3",
-name:"Res Facta - Catastroph"
-}
+{src:"assets/music/acrimony.mp3",name:"Track1"},
+{src:"assets/music/res.mp3",name:"Track2"}
 ];
 
 let i=0;
@@ -268,23 +196,10 @@ name.innerText=tracks[i].name;
 audio.play().catch(()=>{});
 }
 
-btn.onclick=()=>{
-playClick();
-if(audio.paused) audio.play();
-else audio.pause();
-};
+btn.onclick=()=>audio.paused?audio.play():audio.pause();
 
-document.getElementById("prevTrack").onclick=()=>{
-playClick();
-i--; if(i<0)i=tracks.length-1;
-load();
-};
-
-document.getElementById("nextTrack").onclick=()=>{
-playClick();
-i++; if(i>=tracks.length)i=0;
-load();
-};
+document.getElementById("prevTrack").onclick=()=>{i--;if(i<0)i=tracks.length-1;load();};
+document.getElementById("nextTrack").onclick=()=>{i++;if(i>=tracks.length)i=0;load();};
 
 audio.ontimeupdate=()=>{
 if(audio.duration){
@@ -295,28 +210,20 @@ bar.style.width=(audio.currentTime/audio.duration)*100+"%";
 load();
 }
 
-/* =========================
-   RANSOM
-========================= */
+/* RANSOM */
 function ransomText(t){
 
 const fonts=[
 "Special Elite",
 "Courier Prime",
 "IM Fell English",
-"Georgia",
-"Arial Black"
+"Rubik Glitch",
+"VT323",
+"Creepster"
 ];
 
 return [...t].map(c=>{
 if(c===" ") return " ";
-
-const f=fonts[Math.random()*fonts.length|0];
-
-return `<span style="
-font-family:${f};
-display:inline-block;
-transform:rotate(${Math.random()*20-10}deg);
-">${c}</span>`;
+return `<span style="font-family:${fonts[Math.random()*fonts.length|0]};transform:rotate(${Math.random()*20-10}deg);display:inline-block;color:hsl(${Math.random()*30},80%,70%)">${c}</span>`;
 }).join("");
 }

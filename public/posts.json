@@ -19,7 +19,10 @@
       "assets/images/post2/foto2.jpg",
       "assets/images/post2/foto3.jpg",
       "assets/images/post2/foto4.jpg",
-      "assets/videos/post2/video1.mp4"
+      {
+        "type": "video",
+        "src": "multilayergod/videos/post2_video1"
+      }
     ],
     "description": "Yüce, güçlü bir istemden daha sevindirici bir şey yoktur. Senin gibi büyüyen biri çam ağacına benzer; uzun, suskun ve güçlü."
   },
@@ -27,7 +30,10 @@
     "title": "DENEME VERSO 3.1 Nörüngen???",
     "date": "2026-04-28",
     "images": [
-      "assets/videos/post3/video1.mp4"
+      {
+        "type": "video",
+        "src": "multilayergod/videos/post3_video1"
+      }
     ],
     "description": "Hey-hoo!!!"
   }

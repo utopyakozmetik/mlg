@@ -2,69 +2,22 @@ body{
 margin:0;
 background:black;
 color:white;
-font-family:sans-serif;
 overflow:hidden;
 }
 
-#bg{
-position:fixed;
-inset:0;
-background:url("assets/images/background/bg.png") center/cover;
-z-index:-10;
-filter:brightness(0.8);
-}
-
-/* INTRO */
-#intro{
-position:fixed;
-inset:0;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-background:black;
-gap:20px;
-z-index:999;
-}
-
-.intro-title{
-font-size:28px;
-font-family:"IM Fell English";
-}
-
-.lang-grid{display:flex;gap:25px}
-.lang img{width:70px;height:70px}
-
-/* LAYOUT */
 .container{
 display:grid;
-grid-template-columns:15% 55% 30%;
+grid-template-columns:15% 50% 35%;
 height:100vh;
 }
 
-/* FEED */
 #timeline{
 overflow-y:auto;
-padding:70px 20px;
+padding:70px 60px;
 }
 
-.post{margin-bottom:35px;cursor:pointer}
-
-/* INDEX */
-#left-archive{
-padding:70px 20px;
-font-size:14px;
-}
-
-#left-archive div{
-cursor:pointer;
-padding:3px 0;
-}
-
-/* SLIDER */
 .slider{
 position:relative;
-width:100%;
 height:320px;
 overflow:hidden;
 }
@@ -81,6 +34,21 @@ transition:.4s;
 
 .slide.active{opacity:1}
 
+/* FEED BUTTON SCALE FIX */
+.feed-slider .prev img{width:70px;}
+.feed-slider .next img{width:100px;}
+
+.nav-btn{
+position:absolute;
+top:50%;
+transform:translateY(-50%);
+z-index:10;
+cursor:pointer;
+}
+
+.prev{left:10px}
+.next{right:10px}
+
 /* MODAL */
 .modal{
 position:fixed;
@@ -96,12 +64,10 @@ grid-template-columns:70% 30%;
 height:100%;
 }
 
-/* ⚠️ DOKUNMADIK */
 #modal-media{
 display:flex;
 align-items:center;
 justify-content:center;
-height:100%;
 }
 
 #modal-media .slider{
@@ -113,110 +79,10 @@ height:90vh;
 object-fit:contain;
 }
 
-/* NAV IMAGE */
-.nav-btn{
-position:absolute;
-top:50%;
-transform:translateY(-50%);
-cursor:pointer;
-z-index:9999;
-}
-
-.nav-btn img{
-width:45px;
-}
-
-.prev{left:10px}
-.next{right:10px}
-
-/* EXIT IMAGE */
 .exit{
 position:absolute;
 top:20px;
 right:20px;
-width:50px;
+width:70px;
 cursor:pointer;
-z-index:9999;
-}
-
-/* PLAYER */
-.player{margin-top:25px}
-
-.controls{display:flex;gap:10px}
-
-.controls button{
-background:black;
-border:1px solid white;
-color:white;
-padding:6px;
-cursor:pointer;
-}
-
-.progress{height:4px;background:#333}
-#progressBar{height:100%;width:0;background:white}
-
-.track-name{font-size:12px}
-
-/* LINKS */
-.links{margin-top:25px}
-
-.links-title-img{
-width:160px;
-margin-bottom:10px;
-}
-
-#modal-side span{
-letter-spacing:1px;
-}
-
-
-/* SLIDER OKLARI (anasayfa + modal) */
-.nav-btn{
-position:absolute;
-top:50%;
-transform:translateY(-50%);
-z-index:9999;
-cursor:pointer;
-display:flex;
-align-items:center;
-justify-content:center;
-}
-
-/* OK GÖRSELLERİ */
-.nav-btn img{
-width:38px;
-height:auto;
-opacity:0.85;
-transition:0.2s;
-}
-
-.nav-btn img:hover{
-opacity:1;
-transform:scale(1.1);
-}
-
-/* SOL / SAĞ KONUM */
-.prev{left:10px}
-.next{right:10px}
-
-/* MODAL ÖNCEKİ / SONRAKİ POST (BÜYÜK OLAN FIX) */
-#prevPost,
-#nextPost{
-width:55px;   /* 🔥 küçültüldü */
-height:auto;
-}
-
-/* ÇIKIŞ BUTONU (BİRAZ BÜYÜTÜLDÜ) */
-.exit{
-width:70px;   /* 🔥 büyüdü */
-height:auto;
-top:20px;
-right:20px;
-z-index:10000;
-cursor:pointer;
-}
-
-/* SLIDER İÇİN GÜVENCE */
-.slider{
-position:relative;
 }
