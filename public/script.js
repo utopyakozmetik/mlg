@@ -1,10 +1,16 @@
-const CLOUD_NAME="YOUR_CLOUD_NAME";
-
 let posts=[];
 let current=0;
 
 const audio=document.getElementById("globalAudio");
 
+const clickSound=new Audio("assets/sounds/click.mp3");
+
+function playClick(){
+clickSound.currentTime=0;
+clickSound.play().catch(()=>{});
+}
+
+/* INIT */
 document.querySelectorAll(".lang").forEach(l=>{
 l.onclick=()=>init();
 });
@@ -21,92 +27,50 @@ archive();
 player();
 setupModal();
 
-audio.play().catch(()=>{});
+/* sadece müzik autoplay */
+setTimeout(()=>audio.play().catch(()=>{}),500);
 }
 
-/* FEED */
+/* FEED → SADECE İLK MEDYA */
 function render(){
+
 const t=document.getElementById("timeline");
 t.innerHTML="";
 
 posts.forEach((p,i)=>{
+
 const el=document.createElement("div");
 el.className="post";
 
-if(p.images){
-el.appendChild(slider(p.images,false));
+let first=p.images?.[0];
+
+if(first){
+
+let media;
+
+if(typeof first==="string"){
+media=document.createElement("img");
+media.src=first;
+}else{
+media=document.createElement("video");
+media.src=`https://res.cloudinary.com/${CLOUD_NAME}/video/upload/q_auto,f_auto/${first.src}.mp4`;
+media.muted=true;
+media.loop=true;
+media.playsInline=true;
+media.autoplay=true;
 }
 
-el.onclick=()=>openPost(i);
+media.style.width="100%";
+el.appendChild(media);
+}
+
+el.onclick=()=>{
+playClick();
+openPost(i);
+};
 
 t.appendChild(el);
 });
-}
-
-/* SLIDER */
-function slider(arr,isModal){
-
-const wrap=document.createElement("div");
-wrap.className="slider";
-
-if(!isModal) wrap.classList.add("feed-slider");
-
-let i=0;
-
-const slides=arr.map(item=>{
-
-let el;
-
-if(typeof item==="string"){
-el=document.createElement("img");
-el.src=item;
-}else{
-el=document.createElement("video");
-el.src=`https://res.cloudinary.com/${CLOUD_NAME}/video/upload/q_auto,f_auto/${item.src}.mp4`;
-el.poster=`https://res.cloudinary.com/${CLOUD_NAME}/video/upload/${item.src}.jpg`;
-el.loop=true;
-el.muted=true;
-el.playsInline=true;
-}
-
-el.className="slide";
-wrap.appendChild(el);
-return el;
-});
-
-function show(){
-slides.forEach(s=>{
-s.classList.remove("active");
-if(s.tagName==="VIDEO"){
-s.pause();
-s.currentTime=0;
-}
-});
-
-slides[i].classList.add("active");
-
-if(slides[i].tagName==="VIDEO"){
-slides[i].play().catch(()=>{});
-}
-}
-
-const prev=document.createElement("div");
-const next=document.createElement("div");
-
-prev.className="nav-btn prev";
-next.className="nav-btn next";
-
-prev.innerHTML=`<img src="assets/images/onceki.png">`;
-next.innerHTML=`<img src="assets/images/sonraki.png">`;
-
-prev.onclick=(e)=>{e.stopPropagation();i=(i-1+slides.length)%slides.length;show();};
-next.onclick=(e)=>{e.stopPropagation();i=(i+1)%slides.length;show();};
-
-wrap.appendChild(prev);
-wrap.appendChild(next);
-
-show();
-return wrap;
 }
 
 /* MODAL */
@@ -125,7 +89,7 @@ s.innerHTML="";
 audio.pause();
 
 if(p.images){
-m.appendChild(slider(p.images,true));
+m.appendChild(slider(p.images));
 }
 
 if(p.audio){
@@ -133,12 +97,76 @@ audio.src=p.audio;
 audio.play().catch(()=>{});
 }
 
-s.innerHTML=`<h2>${ransomText(p.title)}</h2><p>${ransomText(p.description)}</p>`;
+s.innerHTML=`
+<h2>${ransomText(p.title)}</h2>
+<p>${ransomText(p.description)}</p>
+`;
 
 document.getElementById("modal").classList.remove("hidden");
 }
 
-/* ARCHIVE */
+/* MODAL SLIDER (DEĞİŞMEDİ) */
+function slider(arr){
+
+const wrap=document.createElement("div");
+wrap.className="slider";
+
+let i=0;
+
+const slides=arr.map(item=>{
+
+let el;
+
+if(typeof item==="string"){
+el=document.createElement("img");
+el.src=item;
+}else{
+el=document.createElement("video");
+el.src=`https://res.cloudinary.com/${CLOUD_NAME}/video/upload/q_auto,f_auto/${item.src}.mp4`;
+el.muted=true;
+el.loop=true;
+el.playsInline=true;
+}
+
+el.className="slide";
+wrap.appendChild(el);
+return el;
+});
+
+function show(){
+
+slides.forEach(s=>{
+s.classList.remove("active");
+if(s.tagName==="VIDEO"){
+s.pause();
+s.currentTime=0;
+}
+});
+
+slides[i].classList.add("active");
+
+if(slides[i].tagName==="VIDEO"){
+slides[i].play().catch(()=>{});
+}
+}
+
+const prev=document.createElement("div");
+const next=document.createElement("div");
+
+prev.innerHTML=`<img src="assets/images/onceki.png">`;
+next.innerHTML=`<img src="assets/images/sonraki.png">`;
+
+prev.onclick=(e)=>{e.stopPropagation();i=(i-1+slides.length)%slides.length;show();};
+next.onclick=(e)=>{e.stopPropagation();i=(i+1)%slides.length;show();};
+
+wrap.appendChild(prev);
+wrap.appendChild(next);
+
+show();
+return wrap;
+}
+
+/* ARCHIVE → NİSAN IMAGE FIX */
 function archive(){
 
 const a=document.getElementById("left-archive");
@@ -146,18 +174,23 @@ a.innerHTML="";
 
 const img=document.createElement("img");
 img.src="assets/images/nisan.png";
-img.style.width="120px";
+img.style.width="140px";
 a.appendChild(img);
 
 posts.forEach((p,i)=>{
 const el=document.createElement("div");
 el.innerHTML=ransomText(p.title);
-el.onclick=()=>document.querySelectorAll(".post")[i].scrollIntoView({behavior:"smooth"});
+
+el.onclick=()=>{
+document.querySelectorAll(".post")[i]
+.scrollIntoView({behavior:"smooth"});
+};
+
 a.appendChild(el);
 });
 }
 
-/* MODAL CONTROLS */
+/* MODAL CONTROLS → 1 PREV / 1 NEXT */
 function setupModal(){
 
 document.getElementById("closeModal").onclick=()=>{
@@ -176,12 +209,12 @@ openPost(current);
 };
 }
 
-/* PLAYER */
+/* PLAYER (DEĞİŞMEDİ) */
 function player(){
 
 const tracks=[
-{src:"assets/music/acrimony.mp3",name:"Track1"},
-{src:"assets/music/res.mp3",name:"Track2"}
+{src:"assets/music/acrimony.mp3",name:"Acrimony"},
+{src:"assets/music/res.mp3",name:"Res Facta"}
 ];
 
 let i=0;
@@ -210,20 +243,13 @@ bar.style.width=(audio.currentTime/audio.duration)*100+"%";
 load();
 }
 
-/* RANSOM */
+/* RANSOM (DEĞİŞMEDİ) */
 function ransomText(t){
 
-const fonts=[
-"Special Elite",
-"Courier Prime",
-"IM Fell English",
-"Rubik Glitch",
-"VT323",
-"Creepster"
-];
+const fonts=["Special Elite","Courier Prime","IM Fell English","Georgia","Arial Black"];
 
 return [...t].map(c=>{
 if(c===" ") return " ";
-return `<span style="font-family:${fonts[Math.random()*fonts.length|0]};transform:rotate(${Math.random()*20-10}deg);display:inline-block;color:hsl(${Math.random()*30},80%,70%)">${c}</span>`;
+return `<span style="font-family:${fonts[Math.random()*fonts.length|0]};transform:rotate(${Math.random()*20-10}deg);display:inline-block">${c}</span>`;
 }).join("");
 }

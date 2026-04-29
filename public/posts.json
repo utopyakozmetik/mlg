@@ -8,7 +8,7 @@
       "assets/images/post1/foto3.jpg",
       "assets/images/post1/foto4.jpg"
     ],
-    "description": "Benim yurdumda ve evimde hiç kimse ümitsizliğe kapılmamalı, kendi bölgemde korurum herkesi kendi yabanıl hayvanlarından. İşte budur size sunduğum ilk şey: güvenlik! İkincisi de: serçeparmağımdır. Ve bir kere onu aldınız mı, elimin tümünü de alın, yüreğimi de alın! Hoş geldiniz buraya, misafir dostlarım! Böyle söyledi Zerdüşt ve sevgiyle güldü.",
+    "description": "Benim yurdumda ve evimde hiç kimse ümitsizliğe kapılmamalı...",
     "audio": "assets/audio/track1.mp3"
   },
   {
@@ -18,21 +18,20 @@
       "assets/images/post2/foto1.jpg",
       "assets/images/post2/foto2.jpg",
       "assets/images/post2/foto3.jpg",
-      "assets/images/post2/foto4.jpg",
       {
         "type": "video",
-        "src": "multilayergod/videos/post2_video1"
+        "src": "post2/video1"
       }
     ],
-    "description": "Yüce, güçlü bir istemden daha sevindirici bir şey yoktur. Senin gibi büyüyen biri çam ağacına benzer; uzun, suskun ve güçlü."
+    "description": "Yüce, güçlü bir istemden daha sevindirici bir şey yoktur."
   },
   {
-    "title": "DENEME VERSO 3.1 Nörüngen???",
+    "title": "DENEME VERSO 3.1",
     "date": "2026-04-28",
     "images": [
       {
         "type": "video",
-        "src": "multilayergod/videos/post3_video1"
+        "src": "post3/video1"
       }
     ],
     "description": "Hey-hoo!!!"
