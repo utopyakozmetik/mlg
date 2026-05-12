@@ -34,7 +34,7 @@ setTimeout(()=>audio.play().catch(()=>{}),500);
 /* FEED → SADECE İLK MEDYA */
 function render(){
 
-const t=document.getElementById("timeline");
+const t=document.getElementById("tv-feed");
 t.innerHTML="";
 
 posts.forEach((p,i)=>{
