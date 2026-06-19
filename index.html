@@ -3,35 +3,41 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MultilayerGod TV</title>
+<title>TV Player</title>
 
 <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
 <div id="tv">
 
-    <img src="tv.jpg" id="tvImage" alt="TV">
+    <img src="tv.jpeg" id="tvImage" alt="TV">
 
     <div id="screenFrame">
 
-        <iframe
-            id="player"
-            allow="autoplay; fullscreen"
-            allowfullscreen
-            frameborder="0">
-        </iframe>
+        <div id="screenInner">
 
-        <div id="scanlines"></div>
+            <iframe
+                id="player"
+                allow="autoplay; fullscreen"
+                allowfullscreen>
+            </iframe>
 
-        <div id="channelText">
-            VIDEO 1
+            <div id="scanlines"></div>
+            <div id="crtNoise"></div>
+            <div id="crtFlicker"></div>
+            <div id="signalLoss"></div>
+            <div id="tuneOverlay"></div>
+            <div id="bootOverlay"></div>
+
+            <div id="channelText">VIDEO 1</div>
+
         </div>
-
     </div>
 
-    <div id="prevBtn" title="Önceki Video"></div>
-    <div id="nextBtn" title="Sonraki Video"></div>
+    <div id="prevBtn" title="Previous"></div>
+    <div id="nextBtn" title="Next"></div>
 
 </div>
 
