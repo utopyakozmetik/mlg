@@ -4,26 +4,45 @@
     box-sizing:border-box;
 }
 
+html,
 body{
-    background:#111;
-    width:100vw;
-    height:100vh;
+    width:100%;
+    height:100%;
     overflow:hidden;
+    background:#111;
+}
+
+body{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+/* TV KAPSAYICI */
+
+#tv{
+    position:relative;
+
+    width:100vw;
+    height:100dvh;
 
     display:flex;
     justify-content:center;
     align-items:center;
 }
 
-#tv{
-    position:relative;
-    width:min(95vw,1100px);
-}
+/* TV GÖRSELİ */
 
 #tvImage{
-    width:100%;
+    width:auto;
+    height:100dvh;
+
     display:block;
+    user-select:none;
+    pointer-events:none;
 }
+
+/* EKRAN */
 
 #screenFrame{
     position:absolute;
@@ -35,34 +54,47 @@ body{
     height:48.7%;
 
     overflow:hidden;
+
     background:#000;
 
     border-radius:10px;
+
+    box-shadow:
+    inset 0 0 40px rgba(0,0,0,.7);
 }
+
+/* VİDEO */
 
 #player{
     width:100%;
     height:100%;
     border:none;
-    background:black;
+    background:#000;
 }
+
+/* CRT KANAL YAZISI */
 
 #channelText{
     position:absolute;
-    top:10px;
+
+    top:12px;
     left:12px;
 
     z-index:20;
 
-    color:white;
+    color:#fff;
+
     font-family:Arial,sans-serif;
     font-size:16px;
     font-weight:bold;
 
     text-shadow:
-    0 0 4px #000,
-    0 0 8px #000;
+    0 0 5px #000,
+    0 0 10px #000,
+    0 0 15px #000;
 }
+
+/* SCANLINES */
 
 #scanlines{
     position:absolute;
@@ -73,13 +105,15 @@ body{
         to bottom,
         transparent 0px,
         transparent 2px,
-        rgba(255,255,255,.05) 3px
+        rgba(255,255,255,.04) 3px
     );
 
     pointer-events:none;
+
+    z-index:15;
 }
 
-/* Alt kumanda soldaki düğme */
+/* SOL TUŞ */
 
 #prevBtn{
     position:absolute;
@@ -91,9 +125,11 @@ body{
     height:8%;
 
     cursor:pointer;
+
+    z-index:50;
 }
 
-/* Alt kumanda sağdaki düğme */
+/* SAĞ TUŞ */
 
 #nextBtn{
     position:absolute;
@@ -105,4 +141,82 @@ body{
     height:8%;
 
     cursor:pointer;
+
+    z-index:50;
+}
+
+/* HOVER TEST */
+
+#prevBtn:hover,
+#nextBtn:hover{
+    background:rgba(255,255,255,.08);
+}
+
+/* MOBİL */
+
+@media (max-width:768px){
+
+    #tvImage{
+
+        width:135vw;
+        height:auto;
+
+        max-width:none;
+
+        margin-left:-17.5vw;
+    }
+
+    #screenFrame{
+
+        left:14.8%;
+        top:20.3%;
+
+        width:50.5%;
+        height:50.5%;
+    }
+
+    #channelText{
+        font-size:13px;
+    }
+
+    #prevBtn{
+
+        left:35.5%;
+        top:74.5%;
+
+        width:6%;
+        height:8%;
+    }
+
+    #nextBtn{
+
+        left:44.8%;
+        top:74.5%;
+
+        width:6%;
+        height:8%;
+    }
+
+}
+
+/* KÜÇÜK TELEFONLAR */
+
+@media (max-width:480px){
+
+    #tvImage{
+
+        width:155vw;
+
+        margin-left:-27.5vw;
+    }
+
+    #screenFrame{
+
+        left:14.2%;
+        top:20.1%;
+
+        width:52%;
+        height:52%;
+    }
+
 }
