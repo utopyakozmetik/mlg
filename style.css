@@ -1,0 +1,14 @@
+#screenFrame{
+  position:absolute;
+
+  left:15.4%;
+  top:20.5%;
+
+  width:49%;
+  height:49%;
+
+  overflow:hidden;
+  border-radius:8px;
+
+  background:black;
+}
