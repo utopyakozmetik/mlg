@@ -26,31 +26,26 @@ body{
     height:100vh;
 }
 
-#tvImage{
-    position:absolute;
-    left:50%;
-    top:50%;
-
-    transform:translate(-50%,-50%);
-
-    height:96vh;
-    width:auto;
-
-    z-index:1;
+#tv {
+  position: relative;
+  width: 96vh; /* TV yüksekliğine göre sabit */
+  margin: auto;
 }
 
-/* TV ekranı */
+#tvImage {
+  width: 100%;
+  height: auto;
+}
+
 #screenFrame {
-    position: absolute;
-
-    left: 32%;     /* daha sağa */
-    top: 14.8%;    /* çok az aşağı */
-    
-    width: 25%;    /* biraz daha küçültüldü */
-    aspect-ratio: 1/1;
-
-    z-index: 2;
+  position: absolute;
+  top: 14%;   /* TV’nin kendi yüksekliğine göre */
+  left: 31%;  /* TV’nin kendi genişliğine göre */
+  width: 26%; /* kare ekran */
+  aspect-ratio: 1/1;
+  background: rgba(255,0,0,0.3); /* debug için */
 }
+
 
 
 
