@@ -175,7 +175,7 @@ body{
 @media (max-width: 768px){
   #screenFrame {
     left: 5%;          /* kenardan boşluk */
-    top: 5%;           /* yukarıdan boşluk */
+    top: 14%;           /* yukarıdan boşluk */
     width: 90%;        /* kareyi büyüt */
     aspect-ratio: 1/1; /* kare formu sabit */
   }
