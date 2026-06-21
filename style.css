@@ -28,23 +28,26 @@ body{
 
 #tv {
   position: relative;
-  width: 96vh; /* TV yüksekliğine göre sabit */
+  width: 96vh;   /* TV yüksekliğine göre sabit */
   margin: auto;
 }
 
 #tvImage {
   width: 100%;
   height: auto;
+  display: block;
 }
 
 #screenFrame {
   position: absolute;
-  top: 14%;   /* TV’nin kendi yüksekliğine göre */
-  left: 31%;  /* TV’nin kendi genişliğine göre */
-  width: 26%; /* kare ekran */
+  top: 14%;      /* TV’nin kendi yüksekliğine göre */
+  left: 32%;     /* TV’nin kendi genişliğine göre */
+  width: 25%;    /* kare ekran */
   aspect-ratio: 1/1;
-  background: rgba(255,0,0,0.3); /* debug için */
+  background: rgba(255,0,0,0.3); /* debug için görünür kutu */
+  z-index: 2;
 }
+
 
 
 
