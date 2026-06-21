@@ -20,9 +20,7 @@ body{
     background-size:cover;
     background-position:center;
     background-repeat:no-repeat;
-}
-
-#tv{
+{
     position:relative;
     width:100vw;
     height:100vh;
@@ -42,18 +40,18 @@ body{
 }
 
 /* TV ekranı */
-#screenFrame{
-    position:absolute;
+#screenFrame {
+    position: absolute;
 
-    left:28.8%;
-    top:13.8%;
+    left: 30.5%;   /* biraz sağa kaydırdım */
+    top: 14.2%;    /* çok az aşağı */
+    
+    width: 26.5%;  /* biraz küçültüldü */
+    aspect-ratio: 1/1;
 
-    width:28.2%;
-
-    aspect-ratio:1/1;
-
-    z-index:2;
+    z-index: 2;
 }
+
 
 #screenInner{
     width:100%;
