@@ -25,29 +25,30 @@ body{
 #tv{
     position:relative;
     width:100vw;
-    height:100dvh;
+    height:100vh;
 }
 
 #tvImage{
     position:absolute;
-    inset:0;
+    left:50%;
+    top:50%;
 
-    width:100%;
-    height:100%;
+    transform:translate(-50%,-50%);
 
-    object-fit:contain;
+    height:96vh;
+    width:auto;
 
     z-index:1;
 }
 
-/* TV ekranı - ilk deneme */
+/* TV ekranı */
 #screenFrame{
     position:absolute;
 
-    left:15.2%;
-    top:18.3%;
+    left:28.8%;
+    top:13.8%;
 
-    width:43.8%;
+    width:28.2%;
 
     aspect-ratio:1/1;
 
@@ -74,6 +75,7 @@ body{
     height:100%;
     border:none;
     display:block;
+    background:#000;
 }
 
 #channelText{
@@ -183,31 +185,23 @@ body{
     position:absolute;
 
     left:50%;
-    top:76%;
+    top:73.5%;
 
     transform:translateX(-50%);
 
     display:flex;
     align-items:center;
 
-    gap:8px;
+    gap:4px;
 
     z-index:9999;
 }
 
 #remoteOverlay button{
 
-    background:rgba(0,0,0,.75);
+    padding:6px 8px;
 
-    color:white;
-
-    border:1px solid rgba(255,255,255,.2);
-
-    border-radius:6px;
-
-    padding:8px 10px;
-
-    cursor:pointer;
+    font-size:12px;
 }
 
 #jumpInput{
