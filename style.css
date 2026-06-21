@@ -40,9 +40,9 @@ body{
 
 #screenFrame {
   position: absolute;
-  left: 34.15%;   /* buradan ince ayar yap */
-  top: 18.8%;    /* buradan ince ayar yap */
-  width: 23.4%;  /* buradan büyüt/küçült */
+  left: 34.2%;   /* buradan ince ayar yap */
+  top: 19.1%;    /* buradan ince ayar yap */
+  width: 23.3%;  /* buradan büyüt/küçült */
   aspect-ratio: 1/1;
   z-index: 2;
 }
