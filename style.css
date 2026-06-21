@@ -28,27 +28,29 @@ body{
 
 #tv {
   position: relative;
-  width: 96vh;   /* TV yüksekliğine göre sabit */
-  margin: auto;
+  width: 100vw;
+  height: 100vh;
 }
 
 #tvImage {
-  width: 100%;
-  height: auto;
-  display: block;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  height: 96vh;
+  width: auto;
+  z-index: 1;
 }
 
 #screenFrame {
-    position: absolute;
-
-    left: 31%;     /* hafif sola */
-    top: 18%;      /* bolca aşağıya */
-    
-    width: 28%;    /* biraz daha büyütüldü */
-    aspect-ratio: 1/1;
-
-    z-index: 2;
+  position: absolute;
+  left: 28.8%;   /* buradan ince ayar yap */
+  top: 13.8%;    /* buradan ince ayar yap */
+  width: 28.2%;  /* buradan büyüt/küçült */
+  aspect-ratio: 1/1;
+  z-index: 2;
 }
+
 
 
 

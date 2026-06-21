@@ -98,3 +98,33 @@ document.addEventListener("keydown",(e)=>{
 });
 
 init();
+
+document.addEventListener("keydown", (e) => {
+  const frame = document.getElementById("screenFrame");
+  const style = window.getComputedStyle(frame);
+
+  let left = parseFloat(style.left);
+  let top = parseFloat(style.top);
+  let width = parseFloat(style.width);
+
+  switch (e.key) {
+    case "ArrowLeft":
+      frame.style.left = (left - 0.5) + "%"; // sola kaydır
+      break;
+    case "ArrowRight":
+      frame.style.left = (left + 0.5) + "%"; // sağa kaydır
+      break;
+    case "ArrowUp":
+      frame.style.top = (top - 0.5) + "%"; // yukarı
+      break;
+    case "ArrowDown":
+      frame.style.top = (top + 0.5) + "%"; // aşağı
+      break;
+    case "+":
+      frame.style.width = (width + 0.5) + "%"; // büyüt
+      break;
+    case "-":
+      frame.style.width = (width - 0.5) + "%"; // küçült
+      break;
+  }
+});
