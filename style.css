@@ -43,7 +43,7 @@ body{
   left: 34.2%;   /* buradan ince ayar yap */
   top: 19.1%;    /* buradan ince ayar yap */
   width: 23.3%;  /* buradan büyüt/küçült */
-  aspect-ratio: 1/1;
+  aspect-ratio: 1/1;   /* kare form */
   z-index: 2;
 }
 
@@ -62,7 +62,7 @@ body{
     height:100%;
     border:none;
     display:block;
-    /* background:#000; kaldırıldı */
+    object-fit:cover;   /* videoyu kareye oturtur */
 }
 
 #channelText{
@@ -79,6 +79,114 @@ body{
 
 #scanlines{
     position:absolute;
+    inset:0;
+    z-index:10;
+    pointer-events:none;
+    background:repeating-linear-gradient(
+        to bottom,
+        rgba(255,255,255,0.03),
+        rgba(255,255,255,0.03) 1px,
+        transparent 2px,
+        transparent 4px
+    );
+}
+
+#crtFlicker{
+    position:absolute;
+    inset:0;
+    z-index:12;
+    pointer-events:none;
+    background:black;
+    opacity:0; /* başlangıçta kapalı */
+    animation:flicker 6s infinite;
+}
+
+#signalLoss{
+    position:absolute;
+    inset:0;
+    z-index:13;
+    pointer-events:none;
+    background:rgba(255,255,255,.02);
+    opacity:0; /* başlangıçta kapalı */
+}
+
+#tuneOverlay{
+    position:absolute;
+    inset:0;
+    z-index:14;
+    pointer-events:none;
+    background:black;
+    opacity:0; /* başlangıçta kapalı */
+}
+
+#bootOverlay{
+    position:absolute;
+    inset:0;
+    z-index:15;
+    pointer-events:none;
+    background:black;
+    opacity:0; /* başlangıçta kapalı */
+    animation:boot 2s forwards;
+}
+
+/* Kumanda */
+#remoteOverlay{
+    position:absolute;
+    left:50%;
+    top:73.5%;
+    transform:translateX(-50%);
+    display:flex;
+    align-items:center;
+    gap:4px;
+    z-index:9999;
+}
+
+#remoteOverlay button{
+    padding:6px 8px;
+    font-size:12px;
+}
+
+#jumpInput{
+    width:70px;
+    background:black;
+    color:white;
+    border:1px solid rgba(255,255,255,.2);
+    border-radius:6px;
+    text-align:center;
+    padding:8px;
+}
+
+@keyframes flicker{
+    0%,100%{opacity:0;}
+    50%{opacity:.08;}
+}
+
+@keyframes boot{
+    0%{opacity:1;}
+    100%{opacity:0;}
+}
+
+@keyframes screenWobble{
+    0%,100%{transform:translate(0,0);}
+    50%{transform:translate(.3px,-.3px);}
+}
+
+/* Tam ekran görünüm */
+:fullscreen #screenFrame {
+  width: 90%;          /* ekranın %90’ını kaplasın */
+  aspect-ratio: 1/1;   /* kare formu koru */
+}
+
+/* Mobil ayarları */
+@media (max-width: 768px){
+  #screenFrame {
+    left: 5%;          /* kenardan boşluk */
+    top: 14%;          /* yukarıdan boşluk */
+    width: 90%;        /* kareyi büyüt */
+    aspect-ratio: 1/1; /* kare formu sabit */
+  }
+}
+
     inset:0;
     z-index:10;
     pointer-events:none;

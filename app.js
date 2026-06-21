@@ -74,6 +74,23 @@ document.addEventListener("keydown",(e)=>{
     if(e.key === "-"){
         frame.style.width = (width - 0.5) + "%";
     }
+
+    // F tuşu ile tam ekran
+    if(e.key === "f" || e.key === "F"){
+        goFullscreen();
+    }
 });
+
+// Tam ekran fonksiyonu
+function goFullscreen(){
+    const frame = document.getElementById("screenFrame");
+    if(frame.requestFullscreen){
+        frame.requestFullscreen();
+    } else if(frame.webkitRequestFullscreen){
+        frame.webkitRequestFullscreen();
+    } else if(frame.msRequestFullscreen){
+        frame.msRequestFullscreen();
+    }
+}
 
 init();
