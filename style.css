@@ -39,17 +39,16 @@ body{
 }
 
 #screenFrame {
-  position: absolute;
-  top: 14%;      /* TV’nin kendi yüksekliğine göre */
-  left: 32%;     /* TV’nin kendi genişliğine göre */
-  width: 25%;    /* kare ekran */
-  aspect-ratio: 1/1;
-  background: rgba(255,0,0,0.3); /* debug için görünür kutu */
-  z-index: 2;
+    position: absolute;
+
+    left: 33%;     /* biraz daha sağa */
+    top: 15.5%;    /* biraz aşağıya */
+    
+    width: 27%;    /* biraz büyütüldü */
+    aspect-ratio: 1/1;
+
+    z-index: 2;
 }
-
-
-
 
 
 
