@@ -91,8 +91,6 @@ body{
     );
 }
 
-
-
 #crtFlicker{
     position:absolute;
     inset:0;
@@ -171,4 +169,14 @@ body{
 @keyframes screenWobble{
     0%,100%{transform:translate(0,0);}
     50%{transform:translate(.3px,-.3px);}
+}
+
+/* Mobil ayarları */
+@media (max-width: 768px){
+  #screenFrame {
+    left: 5%;          /* kenardan boşluk */
+    top: 5%;           /* yukarıdan boşluk */
+    width: 90%;        /* kareyi büyüt */
+    aspect-ratio: 1/1; /* kare formu sabit */
+  }
 }
