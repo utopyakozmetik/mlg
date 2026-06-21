@@ -40,9 +40,9 @@ body{
 
 #screenFrame {
   position: absolute;
-  left: 34.0%;   /* buradan ince ayar yap */
-  top: 18.2%;    /* buradan ince ayar yap */
-  width: 24.0%;  /* buradan büyüt/küçült */
+  left: 34.1%;   /* buradan ince ayar yap */
+  top: 18.4%;    /* buradan ince ayar yap */
+  width: 23.8%;  /* buradan büyüt/küçült */
   aspect-ratio: 1/1;
   z-index: 2;
 }
@@ -91,14 +91,7 @@ body{
     );
 }
 
-#crtNoise{
-    position:absolute;
-    inset:0;
-    z-index:11;
-    pointer-events:none;
-    opacity:.05;
-    background-image:url("https://i.imgur.com/3ZQ3ZQp.png");
-}
+
 
 #crtFlicker{
     position:absolute;
