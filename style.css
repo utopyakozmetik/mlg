@@ -20,10 +20,6 @@ body{
     background-size:cover;
     background-position:center;
     background-repeat:no-repeat;
-{
-    position:relative;
-    width:100vw;
-    height:100vh;
 }
 
 #tv {
@@ -51,22 +47,14 @@ body{
   z-index: 2;
 }
 
-
-
-
 #screenInner{
     width:100%;
     height:100%;
-
     position:relative;
-
     overflow:hidden;
-
     border-radius:12px;
-
-    background:#000;
-
     animation:screenWobble 6s infinite ease-in-out;
+    /* background:#000; kaldırıldı */
 }
 
 #player{
@@ -74,34 +62,26 @@ body{
     height:100%;
     border:none;
     display:block;
-    background:#000;
+    /* background:#000; kaldırıldı */
 }
 
 #channelText{
     position:absolute;
-
     top:10px;
     left:10px;
-
     z-index:20;
-
     color:white;
-
     font-family:Arial,sans-serif;
     font-size:14px;
     font-weight:bold;
-
     text-shadow:0 0 5px black;
 }
 
 #scanlines{
     position:absolute;
     inset:0;
-
     z-index:10;
-
     pointer-events:none;
-
     background:repeating-linear-gradient(
         to bottom,
         rgba(255,255,255,0.03),
@@ -114,109 +94,74 @@ body{
 #crtNoise{
     position:absolute;
     inset:0;
-
     z-index:11;
-
     pointer-events:none;
-
     opacity:.05;
-
     background-image:url("https://i.imgur.com/3ZQ3ZQp.png");
 }
 
 #crtFlicker{
     position:absolute;
     inset:0;
-
     z-index:12;
-
     pointer-events:none;
-
     background:black;
-
-    opacity:0;
-
+    opacity:0; /* başlangıçta kapalı */
     animation:flicker 6s infinite;
 }
 
 #signalLoss{
     position:absolute;
     inset:0;
-
     z-index:13;
-
     pointer-events:none;
-
     background:rgba(255,255,255,.02);
-
-    opacity:0;
+    opacity:0; /* başlangıçta kapalı */
 }
 
 #tuneOverlay{
     position:absolute;
     inset:0;
-
     z-index:14;
-
     pointer-events:none;
-
     background:black;
-
-    opacity:0;
+    opacity:0; /* başlangıçta kapalı */
 }
 
 #bootOverlay{
     position:absolute;
     inset:0;
-
     z-index:15;
-
     pointer-events:none;
-
     background:black;
-
+    opacity:0; /* başlangıçta kapalı */
     animation:boot 2s forwards;
 }
 
 /* Kumanda */
 #remoteOverlay{
-
     position:absolute;
-
     left:50%;
     top:73.5%;
-
     transform:translateX(-50%);
-
     display:flex;
     align-items:center;
-
     gap:4px;
-
     z-index:9999;
 }
 
 #remoteOverlay button{
-
     padding:6px 8px;
-
     font-size:12px;
 }
 
 #jumpInput{
-
     width:70px;
-
     background:black;
-
     color:white;
-
     border:1px solid rgba(255,255,255,.2);
-
     border-radius:6px;
-
     text-align:center;
-
     padding:8px;
 }
 
@@ -231,11 +176,6 @@ body{
 }
 
 @keyframes screenWobble{
-    0%,100%{
-        transform:translate(0,0);
-    }
-
-    50%{
-        transform:translate(.3px,-.3px);
-    }
+    0%,100%{transform:translate(0,0);}
+    50%{transform:translate(.3px,-.3px);}
 }
