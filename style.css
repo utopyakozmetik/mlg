@@ -41,10 +41,10 @@ body{
 #screenFrame {
     position: absolute;
 
-    left: 33%;     /* biraz daha sağa */
-    top: 15.5%;    /* biraz aşağıya */
+    left: 31%;     /* hafif sola */
+    top: 18%;      /* bolca aşağıya */
     
-    width: 27%;    /* biraz büyütüldü */
+    width: 28%;    /* biraz daha büyütüldü */
     aspect-ratio: 1/1;
 
     z-index: 2;
