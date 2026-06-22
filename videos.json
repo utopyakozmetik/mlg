@@ -1,5 +1,7 @@
 [
-
+{
+    "iframe": "https://player.mediadelivery.net/play/679398/c44d270f-2a31-47d2-ae12-91626e2705af"
+  },
 {
     "iframe": "https://player.mediadelivery.net/play/679398/97ac3eee-6a44-48df-8404-035da07a4d0e"
   },
@@ -128,9 +130,7 @@
   
   
   
-  {
-    "iframe": "https://iframe.mediadelivery.net/embed/VIDEO07"
-  },
+  
   {
     "iframe": "https://iframe.mediadelivery.net/embed/VIDEO06"
   },
