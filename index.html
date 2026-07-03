@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZABBUK TV</title>
+
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div id="tv">
+
+    <img src="tv.png" id="tvImage" alt="TV">
+
+    <div id="screenFrame">
+
+        <div id="screenInner">
+
+            <iframe
+                id="player"
+                allow="autoplay; fullscreen"
+                allowfullscreen>
+            </iframe>
+
+            <div id="scanlines"></div>
+            <div id="crtNoise"></div>
+            <div id="crtFlicker"></div>
+            <div id="signalLoss"></div>
+            <div id="tuneOverlay"></div>
+            <div id="bootOverlay"></div>
+
+            <div id="channelText">VIDEO 1</div>
+
+        </div>
+
+    </div>
+
+    <div id="remoteOverlay">
+
+        <button id="minus100">-100</button>
+        <button id="minus10">-10</button>
+
+        <button id="prevBtn">◀</button>
+
+        <input
+            id="jumpInput"
+            type="number"
+            placeholder="#"
+        >
+
+        <button id="nextBtn">▶</button>
+
+        <button id="plus10">+10</button>
+        <button id="plus100">+100</button>
+
+    </div>
+
+</div>
+
+<script src="app.js"></script>
+
+</body>
+</html>
